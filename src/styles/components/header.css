@@ -1,11 +1,13 @@
 /* Header */
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;padding:12px var(--g);background:var(--bg);border-bottom:2px solid var(--text)}
-/* The menu sits centered between the AM box and the buttons, so the name that fades in on scroll floats beside the box instead of taking space. */
-.mark{position:relative;display:inline-flex;align-items:center;gap:12px;text-decoration:none;min-height:44px}
+/* The menu sits left, after the AM box. On scroll the name opens up beside the box (0fr → 1fr), pushing the menu along with it. */
+.mark{display:inline-flex;align-items:center;text-decoration:none;min-height:44px}
 .mono{display:inline-grid;place-items:center;width:40px;height:40px;background:var(--blue);color:#fff;font-family:var(--cond);font-weight:900;font-size:22px;border-radius:6px;letter-spacing:.02em}
-.mark-name{position:absolute;left:calc(100% + 12px);white-space:nowrap;font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:17px;letter-spacing:-0.03em;opacity:0;transform:translateY(6px);transition:opacity .3s ease,transform .3s ease}
-.top.is-scrolled .mark-name{opacity:1;transform:none}
-.top nav{display:flex;gap:30px;justify-self:center}
+.mark-name{display:grid;grid-template-columns:0fr;margin-left:0;transition:grid-template-columns .5s cubic-bezier(.2,.8,.2,1),margin-left .5s cubic-bezier(.2,.8,.2,1)}
+.mark-name>span{min-width:0;overflow:hidden;white-space:nowrap;font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:17px;letter-spacing:-0.03em;opacity:0;transform:translateY(6px);transition:opacity .3s ease,transform .3s ease}
+.top.is-scrolled .mark-name{grid-template-columns:1fr;margin-left:12px}
+.top.is-scrolled .mark-name>span{opacity:1;transform:none;transition-delay:.12s}
+.top nav{display:flex;gap:30px;justify-self:start;margin-left:clamp(16px,2.5vw,40px)}
 .top nav a{font-family:var(--cond);font-weight:800;font-size:20px;text-transform:uppercase;letter-spacing:.06em;text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
 .top nav a:hover{box-shadow:inset 0 -4px 0 var(--blue)}
 .top .right{justify-self:end;display:flex;gap:10px;align-items:center}
