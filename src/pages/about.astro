@@ -1,11 +1,6 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Footer from "../components/Footer.astro";
-import ContactSection from "../components/ContactSection.astro";
-import Header from "../components/Header.astro";
-import { SITE_TITLE, SITE_ROLE, SITE_DESCRIPTION, SITE_CV_URL, SITE_EMAIL, SITE_LINKEDIN_URL, SITE_X_URL, SITE_INSTAGRAM_URL } from "../consts";
-
-const year = new Date().getFullYear();
+import { SITE_DESCRIPTION, SITE_GITHUB_URL, SITE_INSTAGRAM_URL, SITE_LINKEDIN_URL, SITE_ROLE, SITE_TITLE, SITE_X_URL } from "../consts";
+import Site from "../layouts/Site.astro";
 
 const personJsonLd = JSON.stringify({
 	"@context": "https://schema.org",
@@ -15,320 +10,95 @@ const personJsonLd = JSON.stringify({
 	description: SITE_DESCRIPTION,
 	jobTitle: SITE_ROLE,
 	address: { "@type": "PostalAddress", addressLocality: "Madrid", addressCountry: "ES" },
-	sameAs: [SITE_LINKEDIN_URL, SITE_X_URL, SITE_INSTAGRAM_URL],
+	sameAs: [SITE_LINKEDIN_URL, SITE_GITHUB_URL, SITE_X_URL, SITE_INSTAGRAM_URL],
 	knowsAbout: ["Infrastructure", "Virtualization", "Proxmox", "Linux", "Windows Server", "Networking", "Self-hosting", "Local LLM inference"],
 });
+
+const chapters = [
+	{
+		age: "6",
+		title: "The first website.",
+		text: "Before I could explain what a server was, I wanted one. The website came first, and with it the habit of taking things apart to see how they run.",
+	},
+	{
+		age: "8",
+		title: "Minecraft servers.",
+		text: "Plugins in Java, which I hated. But it was the first time I cared more about how the server worked than what I was building on top of it. The systems instinct was there before I had a name for it.",
+	},
+	{
+		age: "13",
+		title: "TypeScript and Discord bots.",
+		text: "By thirteen I had most of the technical foundations I still carry. Code that other people actually used, and broke, and needed fixed.",
+	},
+	{
+		age: "15",
+		title: "Turing AI.",
+		text: "Product and community manager for an AI product with <b>767,000+ users</b>, later acquired by shapes.inc. I turned what people told us into fixes, and helped put the AI APIs behind RabbitMQ load balancing so the service held up while it grew.",
+	},
+	{
+		age: "17",
+		title: "Burnout, then the homelab.",
+		text: "Then burnout hit. A hard stop. The homelab brought me back: a Proxmox cluster built from hardware other people retired, running my own Matrix and Nextcloud and local AI. Fixing real errors on real machines, with real consequences, fixed something in me too. Around the same time I built servers at Ibertronica, testing every one before it shipped.",
+	},
+	{
+		age: "18",
+		title: "Abalun, and the paper trail.",
+		text: "Practice hours at Abalun pulled me into real work fast enough that the line blurred: sites in Webflow and Elementor, schemas and migrations in MySQL and PostgreSQL. What it mostly did was kill the impostor syndrome. Turns out the impostor was the lie, not me. The CFGM in Microcomputer Systems and Networks made it official in June 2026.",
+	},
+];
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead
-			title="About"
-			description={`Madrid born and raised. ${SITE_ROLE}. Building things that close the gap between people and what they need.`}
-		/>
-		<script is:inline type="application/ld+json" set:html={personJsonLd} />
-	</head>
-	<body>
-		<a href="#main" class="sr-only skip-link">Skip to content</a>
-		<Header />
-		<main id="main" class="site-main">
+<Site title="About" description={`Madrid born and raised. ${SITE_ROLE}. The full story, from a first website at six to a homelab that never sleeps.`}>
+	<script is:inline slot="head" type="application/ld+json" set:html={personJsonLd} />
 
-			{/* Hero */}
-			<section class="section section-first">
-				<div class="container">
-					<span class="eyebrow anim-fade-up" style="--delay: 0.05s">
-						<span class="num">§ 00</span>About · Madrid, {year}
-					</span>
-					<h1 class="display-mega" style="margin-top: 32px; max-width: 14ch;">
-						<span class="reveal-line">
-							<span class="reveal-line-inner" style="--line: 0; --delay: 0.1s">Made in</span>
-						</span>
-						<span class="reveal-line">
-							<span class="reveal-line-inner" style="--line: 1; --delay: 0.1s"><span style="white-space: nowrap"><em>Madrid</em><span class="accent accent-pulse">.</span></span></span>
-						</span>
-					</h1>
-					<div class="hero-grid anim-fade-up" style="--delay: 0.5s">
-						<div class="hero-grid-serif">
-							Six years old, and already more interested in how the
-							server worked than what was running on top of it.
-						</div>
-						<div class="hero-grid-right">
-							<p class="lead">
-								{SITE_ROLE}. ADHD, Asperger's, gifted.
-								Building things that close the gap between people
-								and what they need.
-							</p>
-						</div>
-					</div>
-				</div>
-			</section>
+	<section class="story-hero">
+		<a class="back" href="/">← Back home</a>
+		<span class="lbl">About · the full story</span>
+		<h1 class="cond story-title">The full<br />story.</h1>
+		<p class="story-lead">Madrid born and raised. {SITE_ROLE}. ADHD, Asperger's, gifted. Building things that close the gap between people and what they need.</p>
+	</section>
 
-			{/* Now + Path */}
-			<section class="section">
-				<div class="container">
-					<div class="about-grid reveal">
-						<div class="about-block">
-							<span class="eyebrow about-block-eyebrow">
-								<span class="num">§ 01</span>Now
-							</span>
-							<div class="about-prose">
-								<p>
-									CFGM in Microcomputer Systems and Networks: done
-									(2024–2026). Now I'm choosing what comes next, and I'm
-									choosing carefully: infrastructure, with people who care
-									how things run. If that's you, <a href={`mailto:${SITE_EMAIL}`}>write me</a>.
-								</p>
-								<p>
-									Most of my hours go into the homelab: a Proxmox cluster
-									built from hardware other people retired, running my own
-									Matrix and Nextcloud, plus local AI inference on my
-									workstation. Everything self-hosted, everything mine to fix.
-								</p>
-								<p>
-									Outside that: building independently, when my ADHD lands
-									somewhere. Not always on a schedule. But when it hits,
-									it hits hard. And lately, music: learning to produce and to
-									sing. Early days, solid foundations.
-								</p>
-							</div>
-						</div>
-
-						<div class="about-block">
-							<span class="eyebrow about-block-eyebrow">
-								<span class="num">§ 02</span>Path
-							</span>
-							<div class="about-prose">
-								<p>
-									The website came first, at six. Then Minecraft plugins at
-									eight — Java, which I hated, but it was the first time I
-									cared more about how the server worked than what I was
-									building on top of it. The systems instinct was already
-									there before I had a name for it. By thirteen: TypeScript
-									and Discord bots.
-								</p>
-								<p>
-									In 2023, product and community manager at Turing AI
-									(later acquired by shapes.inc): the user experience for
-									767,000+ people, and helping put its AI APIs behind
-									RabbitMQ load balancing as it grew.
-								</p>
-								<p>
-									The CFGM is the formal credential. More paper trail than
-									origin story. Then burnout hit. A hard stop.
-								</p>
-								<p>
-									The homelab brought me back — started it in May 2025.
-									Fixing real errors on real machines, with actual
-									consequences, fixed something in me too. It still does.
-									Around it: building servers at Ibertronica, and practice
-									hours at <a href="https://abalun.com" target="_blank" rel="noreferrer">Abalun</a>,
-									where I was pulled into real work fast enough that the
-									line blurred. What it mostly did was kill the impostor
-									syndrome. Turns out the impostor was the lie, not me.
-								</p>
-								<p>
-									The dates and details are in the <a href={SITE_CV_URL}>CV</a>.
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-
-			{/* The thread */}
-			<section class="section section-sunken">
-				<div class="container">
-					<div class="about-thread reveal">
-						<span class="eyebrow about-block-eyebrow">
-							<span class="num">§ 03</span>The thread
-						</span>
-						<blockquote class="about-conviction">
-							The distance between people and what they need — information,
-							calm, clarity, each other — is always smaller than it looks.
-							Almost always a design problem.
-						</blockquote>
-						<div class="about-thread-body reveal" style="--reveal-delay: 0.1s">
-							<p>
-								A Staff Planner AI so the person running a team can stop
-								carrying that weight in their head.
-							</p>
-							<p>
-								A Discord MCP Server so an AI can show up where your
-								people already are.
-							</p>
-							<p>
-								Caynac and Maniac so a file, a song, something you wanted
-								to share, actually gets there — regardless of what tools
-								the other person has.
-							</p>
-							<p>
-								aPhone Mirroring so your own device stops gatekeeping
-								your own life.
-							</p>
-							<p>
-								Dispatch so the world doesn't require you to go looking
-								for it every morning.
-							</p>
-							<p>
-								A Personal Assistant that runs on your machine, answers
-								to you, and doesn't send anything anywhere.
-							</p>
-							<p>
-								I build to close that gap. Music pulls at me for the same
-								reason: a good song doesn't create emotion — it removes the
-								obstacle to it. Same work, different tools.
-							</p>
-						</div>
-					</div>
-				</div>
-			</section>
-
-			{/* Writing */}
-			<section class="section">
-				<div class="container">
-					<div class="about-grid reveal">
-						<div class="about-block">
-							<span class="eyebrow about-block-eyebrow">
-								<span class="num">§ 04</span>Writing
-							</span>
-							<div class="about-prose">
-								<p>
-									Writing isn't a creative ambition I'm working toward.
-									It's how I think. I'm the kind of person who types out
-									three paragraphs to understand what a single sentence is
-									actually saying.
-								</p>
-								<p>
-									I want to write about whatever I'm currently trying to
-									understand: systems architecture and why certain decisions
-									feel inevitable in hindsight. Neurodivergence — not the
-									clinical version, the lived one. The moments where a
-									technical problem turns out to be an emotional one in
-									disguise. The load-bearing parts of a person that don't
-									show up in a résumé or a GitHub profile.
-								</p>
-								<p>
-									I don't write to have an audience. But if someone reads
-									it and feels less alone in whatever they've been running
-									quietly — that's the whole point.
-								</p>
-							</div>
-						</div>
-
-						<div class="about-block">
-							<span class="eyebrow about-block-eyebrow">
-								<span class="num">§ 05</span>Madrid
-							</span>
-							<div class="about-prose">
-								<p>
-									Home in the truest sense — not the place I ended up, but
-									the place that made me. The people I love most, I met
-									here. The streets have context. The city has weight.
-								</p>
-								<p>
-									But I've started to feel the edges. Not the city itself —
-									Madrid I could defend to anyone. Something in the rhythms,
-									the assumptions, the way certain things are just accepted
-									as given.
-								</p>
-								<p>
-									So yes, home. And yes, probably a chapter. Not because
-									I'm running from anything — because I think I owe it to
-									myself to find out what happens when I leave.
-									Where? I don't know yet. I'll know it when I get there.
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-
-			<ContactSection number="06" />
-
-		</main>
-		<Footer />
-
-	</body>
-</html>
-
-<style>
-	.about-grid {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 80px;
-		align-items: start;
-	}
-
-	.about-block-eyebrow {
-		display: block;
-		margin-bottom: 32px;
-	}
-
-	.about-prose p {
-		font-family: var(--font-sans);
-		font-size: 17px;
-		line-height: 1.7;
-		color: var(--ink-2);
-		margin: 0 0 20px;
-		max-width: 52ch;
-	}
-
-	.about-prose p:last-child {
-		margin-bottom: 0;
-	}
-
-	.about-prose em {
-		font-family: var(--font-serif);
-		font-style: italic;
-		font-weight: 400;
-		color: var(--ink);
-	}
-
-	/* Thread section */
-	.about-thread {
-		max-width: 800px;
-	}
-
-	.about-conviction {
-		font-family: var(--font-display);
-		font-weight: 900;
-		font-size: clamp(24px, 2.8vw, 40px);
-		line-height: 1.1;
-		letter-spacing: -0.02em;
-		color: var(--ink);
-		margin: 32px 0 40px;
-		padding: 0;
-		border: none;
-	}
-
-	.about-thread-body p {
-		font-family: var(--font-sans);
-		font-size: 17px;
-		line-height: 1.7;
-		color: var(--ink-2);
-		margin: 0 0 20px;
-		max-width: 64ch;
-	}
-
-	.about-thread-body p:last-child {
-		margin-bottom: 0;
-	}
-
-	@media (max-width: 760px) {
-		.about-grid {
-			grid-template-columns: 1fr;
-			gap: 56px;
+	<section class="sec chapters" aria-label="Chapters">
+		{
+			chapters.map((c) => (
+				<article class="chapter">
+					<div class="age"><span class="cond">{c.age}</span><span class="lbl">years old</span></div>
+					<div class="ch-body"><h2>{c.title}</h2><p set:html={c.text} /></div>
+				</article>
+			))
 		}
+		<article class="chapter now">
+			<div class="age"><span class="cond">Now</span><span class="lbl">2026</span></div>
+			<div class="ch-body">
+				<h2>Choosing the next room.</h2>
+				<p>I'm looking for infrastructure work with people who care how things run, in Madrid or remote. Moxen, my control plane for AI coding agents, is taking shape on the side.</p>
+				<a class="btn btn-blue" href="#contact">Hire me ↗</a>
+			</div>
+		</article>
+	</section>
 
-		.about-conviction {
-			font-size: clamp(22px, 5.5vw, 32px);
-		}
+	<section class="sec thread">
+		<span class="lbl">The thread</span>
+		<blockquote class="cond">The distance between people and what they need is always smaller than it looks.</blockquote>
+		<p>Every project I build closes that gap a little. A scheduler that stops a manager carrying the week in their head. An AI that shows up where your people already are. A phone that stops gatekeeping your own life. Music pulls at me for the same reason: a good song doesn't create emotion, it removes what's in the way of it.</p>
+	</section>
 
-		.about-prose p,
-		.about-thread-body p {
-			max-width: none;
-			font-size: 16px;
-		}
-	}
-</style>
+	<section class="sec trio">
+		<article>
+			<span class="lbl">Writing</span>
+			<h3>How I think.</h3>
+			<p>I'll type three paragraphs to understand one sentence. I want to write about whatever I'm trying to understand: systems, neurodivergence as it's lived, the parts of a person that don't fit on a CV. First essay: being present, and nostalgia.</p>
+		</article>
+		<article>
+			<span class="lbl">Music</span>
+			<h3>Side B.</h3>
+			<p>Learning to produce and to sing. Early days, solid foundations, and a first instrumental you can already play on the home page.</p>
+			<a class="more" href="/#sides">Play “it's complicated” ↗</a>
+		</article>
+		<article>
+			<span class="lbl">Madrid</span>
+			<h3>Home, for now.</h3>
+			<p>The place that made me, and the people I love most are here. But I've started to feel the edges. One day I'll find out what happens when I leave. Until then: Madrid, and open to remote.</p>
+		</article>
+	</section>
+</Site>

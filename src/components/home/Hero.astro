@@ -1,0 +1,45 @@
+---
+import { SITE_CV_URL, SITE_ROLE, SITE_TITLE } from "../../consts";
+import { FACTS } from "../../data/experience";
+---
+
+<h1 class="name" id="name">{SITE_TITLE}</h1>
+
+<section class="hero" aria-label="Introduction">
+	<div class="panel">
+		<canvas id="heroDots" role="img" aria-label="Portrait of Aaron in a cap and hoodie, drawn in white dots. Hovering reveals the photo."></canvas>
+	</div>
+	<div class="bill">
+		<h2 class="cond role">{SITE_ROLE.split(" ")[0]}<br />{SITE_ROLE.split(" ").slice(1).join(" ")}.</h2>
+		<p>Servers, networks and virtualization by day. Learning to produce music and sing by night.</p>
+		<p class="stance">Strong opinions, held calmly.</p>
+		<div class="ctas">
+			<a class="btn btn-blue" href="#contact">Hire me ↗</a>
+			<a class="btn btn-line" href="#work">See the work</a>
+			<a class="btn btn-line" href={SITE_CV_URL}>CV (PDF)</a>
+		</div>
+	</div>
+</section>
+
+<div class="band">
+	<div class="ticker">
+		<p>{FACTS.map((f) => <Fragment>{f}<i aria-hidden="true">✶</i></Fragment>)}</p>
+		<p aria-hidden="true">{FACTS.map((f) => <Fragment>{f}<i>✶</i></Fragment>)}</p>
+	</div>
+</div>
+
+<script>
+	import { DotField } from "../../scripts/dot-field";
+
+	const phone = innerWidth < 820;
+	new DotField(document.getElementById("heroDots") as HTMLCanvasElement, "/media/head-density.png", {
+		count: phone ? 7000 : 15000,
+		stillCount: phone ? 24000 : 40000,
+		baseAlpha: 0.7,
+		color: "#ffffff",
+		bg: "#2b3bff",
+		speed: 0.32,
+		fit: 0.96,
+		photo: "/media/head-photo.webp",
+	});
+</script>

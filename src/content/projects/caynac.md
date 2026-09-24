@@ -1,6 +1,6 @@
 ---
 title: "Caynac: Caymann & Maniac"
-description: "Game repacking CLI tools with a React-powered TUI — 13 releases shipped."
+description: "Two game-repacking CLIs with a React-in-the-terminal UI. Thirteen releases in."
 role: "Tool Development"
 techStack: ["TypeScript", "Bun", "Ink", "React"]
 github: https://github.com/arrrnmp/caynac

@@ -1,6 +1,6 @@
 ---
 title: "Dispatch"
-description: "AI-researched daily briefings delivered every morning — be the most interesting one in the standup."
+description: "A Claude Routine that researches the news and ships a fresh briefing every morning."
 role: "Automation & Research"
 techStack: ["Claude Code", "Cloud Routines", "MDX", "Astro"]
 url: https://dispatch.aaronmompie.com

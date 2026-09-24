@@ -1,0 +1,25 @@
+---
+import { EXPERIENCE } from "../../data/experience";
+---
+
+<section class="sec" id="experience">
+	<div class="sechead"><h2 class="cond h2">Experience</h2></div>
+	{
+		EXPERIENCE.map((job) => (
+			<article class="job">
+				<div class="when">
+					<div class="yr">{job.when}</div>
+					<span class:list={["badge", { on: job.badge === "Nightly" }]}>{job.badge}</span>
+				</div>
+				<div>
+					<h3 class="co">{job.org}</h3>
+					<div class="ro">{job.role}</div>
+					{job.note && <div class="note">{job.note}</div>}
+				</div>
+				<ul class="did">
+					{job.did.map((d) => <li set:html={d} />)}
+				</ul>
+			</article>
+		))
+	}
+</section>

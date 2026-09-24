@@ -1,148 +1,21 @@
 ---
 import { getCollection } from "astro:content";
-import BaseHead from "../../components/BaseHead.astro";
-import Footer from "../../components/Footer.astro";
-import ContactSection from "../../components/ContactSection.astro";
-import Header from "../../components/Header.astro";
-import { getReadingTime } from "../../utils/reading-time";
+import PostList from "../../components/PostList.astro";
+import Site from "../../layouts/Site.astro";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
-
-const year = new Date().getFullYear();
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead
-			title="Writing"
-			description="Essays and notes on systems, software, and the rest."
-		/>
-	</head>
-	<body>
-		<a href="#main" class="sr-only skip-link">Skip to content</a>
-		<Header />
-		<main id="main" class="site-main">
-
-			{/* Hero */}
-			<section class="section section-first">
-				<div class="container">
-					<span class="eyebrow anim-fade-up" style="--delay: 0.05s">
-						<span class="num">§ 00</span>Writing · Madrid, {year}
-					</span>
-					<h1 class="display-mega" style="margin-top: 32px; max-width: 16ch;">
-						<span class="reveal-line">
-							<span class="reveal-line-inner" style="--line: 0; --delay: 0.1s">Words on</span>
-						</span>
-						<span class="reveal-line">
-							<span class="reveal-line-inner" style="--line: 1; --delay: 0.1s">the <span style="white-space: nowrap"><em>work</em><span class="accent accent-pulse">.</span></span></span>
-						</span>
-					</h1>
-					<div class="hero-grid anim-fade-up" style="--delay: 0.5s">
-						<div class="hero-grid-serif">
-							Systems do most of the talking. These are the notes
-							left behind.
-						</div>
-						<div class="hero-grid-right">
-							<p class="lead">
-								{posts.length} {posts.length === 1 ? "essay" : "essays"} so far.
-								On infrastructure, tools, and whatever else
-								refuses to leave quietly.
-							</p>
-						</div>
-					</div>
-				</div>
-			</section>
-
-			{/* Archive */}
-			{posts.length > 0 && (
-				<section class="section">
-					<div class="container">
-						<div class="section-header reveal">
-							<span class="eyebrow"><span class="num">§ 01</span>Archive</span>
-						</div>
-						<div class="irow-list">
-							{posts.map((post, i) => (
-								<a
-									href={`/blog/${post.id}/`}
-									class="irow reveal"
-									style={`--reveal-delay: ${0.05 + i * 0.06}s`}
-								>
-									<span class="irow-idx">{String(i + 1).padStart(2, "0")} ―</span>
-									<span>
-										<span class="irow-title">{post.data.title}</span>
-										{post.data.description && (
-											<span class="irow-subtitle" style="display:block">
-												{post.data.description}
-											</span>
-										)}
-										{post.data.tags && post.data.tags.length > 0 && (
-											<span class="writing-tags">
-												{post.data.tags.map((tag) => (
-													<span class="writing-tag">{tag}</span>
-												))}
-											</span>
-										)}
-									</span>
-									<span class="irow-meta">
-										{post.data.pubDate.toLocaleDateString("en-US", { month: "short", year: "numeric" })}
-										<span class="irow-reading">{getReadingTime(post.body ?? "")} min</span>
-									</span>
-									<span class="irow-arrow">→</span>
-								</a>
-							))}
-						</div>
-					</div>
-				</section>
-			)}
-
-			{posts.length === 0 && (
-				<section class="section">
-					<div class="container reveal" style="text-align: center; padding: 80px 0">
-						<span class="eyebrow"><span class="num">§ 01</span>Archive</span>
-						<p class="lead" style="margin-top: 24px; color: var(--ink-3)">Nothing published yet. Check back soon.</p>
-					</div>
-				</section>
-			)}
-
-			<ContactSection number="02" />
-
-		</main>
-		<Footer />
-
-	</body>
-</html>
-
-<style>
-	.writing-tags {
-		display: inline-flex;
-		flex-wrap: wrap;
-		gap: 8px;
-		margin-top: 8px;
-	}
-
-	.writing-tag {
-		font-family: var(--font-condensed);
-		font-size: 11px;
-		font-stretch: 75%;
-		font-weight: 500;
-		letter-spacing: 0.18em;
-		text-transform: uppercase;
-		color: var(--ink-4);
-		border: 1px solid var(--paper-3);
-		padding: 2px 8px;
-	}
-
-	.irow-reading {
-		display: block;
-		font-family: var(--font-condensed);
-		font-size: 11px;
-		font-stretch: 75%;
-		letter-spacing: 0.15em;
-		text-transform: uppercase;
-		color: var(--ink-5);
-		margin-top: 4px;
-	}
-</style>
+<Site title="Writing" description="Essays and notes on systems, software, and the rest.">
+	<section class="page-hero">
+		<a class="back" href="/">← Back home</a>
+		<span class="lbl">Writing</span>
+		<h1 class="cond page-title">Writing.</h1>
+		<p class="page-lead">Whatever I'm trying to understand: systems, people, and the parts that don't fit on a CV.</p>
+	</section>
+	<section class="sec" style="padding-top: 56px">
+		<PostList posts={posts} />
+	</section>
+</Site>

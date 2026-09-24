@@ -1,0 +1,15 @@
+/* Finale: fixed behind the sheet, revealed as the sheet scrolls away */
+.finale{position:fixed;left:0;right:0;bottom:0;height:100svh;z-index:1;background:var(--blue);color:#fff;display:flex;flex-direction:column;padding:calc(var(--g) + 20px) var(--g) 0;padding-bottom:env(safe-area-inset-bottom,0px)}
+.finale-wrap{flex:1;display:flex;flex-direction:column;transform:translateY(var(--lift,12%));opacity:var(--fade,0)}
+.finale-in{flex:1;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:32px;align-items:end}
+.finale .lbl{color:#dfe2ff;font-size:22px;letter-spacing:.16em}
+.finale h2{font-size:clamp(80px,11vw,170px);margin:12px 0 30px;color:#fff}
+.mail{display:block;font-family:var(--display);font-weight:700;font-size:clamp(19px,3vw,44px);text-decoration:none;line-height:1.1;letter-spacing:0;color:#fff;white-space:nowrap}
+.mail:hover{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:8px}
+.copyrow{display:flex;gap:10px;align-items:center;margin-top:14px}
+.copy{min-height:44px;padding:8px 14px;border:2px solid #fff;background:transparent;color:#fff;border-radius:6px;font-family:var(--cond);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:15px;cursor:pointer}
+.biglinks{display:flex;gap:28px;margin-top:30px;flex-wrap:wrap}
+.biglinks a{font-family:var(--cond);font-weight:900;font-size:30px;text-transform:uppercase;letter-spacing:.05em;min-height:44px;display:inline-flex;align-items:center;text-underline-offset:6px;text-decoration-thickness:3px;color:#fff}
+.pose{position:relative;height:min(78svh,720px);align-self:end}
+.pose canvas{position:absolute;inset:0;width:100%;height:100%}
+.fine{display:flex;justify-content:space-between;padding:22px 0;margin-top:24px;border-top:2px solid rgba(255,255,255,.7);font-family:var(--cond);font-weight:800;text-transform:uppercase;letter-spacing:.1em;font-size:15px;color:#e4e6ff}

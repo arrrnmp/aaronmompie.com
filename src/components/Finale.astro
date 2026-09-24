@@ -1,0 +1,92 @@
+---
+import {
+	SITE_CV_URL,
+	SITE_EMAIL,
+	SITE_GITHUB_URL,
+	SITE_INSTAGRAM_URL,
+	SITE_LINKEDIN_URL,
+	SITE_TITLE,
+	SITE_X_URL,
+} from "../consts";
+
+const year = new Date().getFullYear();
+---
+
+<!-- Fixed behind the page; revealed as the page scrolls away. -->
+<footer class="finale" id="contact">
+	<div class="finale-wrap" id="finaleWrap">
+		<div class="finale-in">
+			<div>
+				<div class="lbl">Booking &amp; hiring</div>
+				<h2 class="cond">Let's talk.</h2>
+				<a class="mail" href={`mailto:${SITE_EMAIL}`} id="mail">{SITE_EMAIL}</a>
+				<div class="copyrow"><button class="copy" id="copy" type="button">Copy email</button></div>
+				<div class="biglinks">
+					<a href={SITE_LINKEDIN_URL} rel="noreferrer" target="_blank">LinkedIn</a>
+					<a href={SITE_GITHUB_URL} rel="noreferrer" target="_blank">GitHub</a>
+					<a href={SITE_X_URL} rel="noreferrer" target="_blank">X</a>
+					<a href={SITE_INSTAGRAM_URL} rel="noreferrer" target="_blank">Instagram</a>
+					<a href={SITE_CV_URL}>CV (PDF)</a>
+				</div>
+			</div>
+			<div class="pose">
+				<canvas id="poseDots" role="img" aria-label="Aaron framing the camera with his hand, drawn in white dots. Hovering reveals the photo."></canvas>
+			</div>
+		</div>
+		<div class="fine"><span>{SITE_TITLE} · {year} world tour</span><span>Madrid, ES</span></div>
+	</div>
+</footer>
+
+<script>
+	import { DotField, reducedMotion } from "../scripts/dot-field";
+	import { SITE_EMAIL } from "../consts";
+
+	const phone = innerWidth < 820;
+	new DotField(document.getElementById("poseDots") as HTMLCanvasElement, "/media/body-density.png", {
+		count: phone ? 4000 : 8000,
+		stillCount: phone ? 12000 : 24000,
+		baseAlpha: 0.7,
+		color: "#ffffff",
+		bg: "#2b3bff",
+		speed: 0.28,
+		fit: 1,
+		photo: "/media/body-photo.webp",
+	});
+
+	// The footer slides up and fades in as the page lifts off it.
+	const sheet = document.getElementById("sheet")!;
+	const wrap = document.getElementById("finaleWrap")!;
+	function reveal() {
+		const p = Math.max(0, Math.min(1, (innerHeight - sheet.getBoundingClientRect().bottom) / innerHeight));
+		const still = reducedMotion.matches;
+		wrap.style.setProperty("--lift", still ? "0%" : `${(1 - p) * 14}%`);
+		wrap.style.setProperty("--fade", String(still ? (p > 0.05 ? 1 : 0) : Math.min(1, p * 1.6)));
+	}
+	addEventListener("scroll", reveal, { passive: true });
+	addEventListener("resize", reveal);
+	reveal();
+
+	// "#contact" links scroll to the very bottom, where the footer is fully revealed.
+	document.querySelectorAll<HTMLAnchorElement>('a[href="#contact"]').forEach((a) =>
+		a.addEventListener("click", (e) => {
+			e.preventDefault();
+			scrollTo({ top: document.documentElement.scrollHeight, behavior: reducedMotion.matches ? "auto" : "smooth" });
+		}),
+	);
+
+	const copy = document.getElementById("copy")!;
+	copy.addEventListener("click", async () => {
+		try {
+			await navigator.clipboard.writeText(SITE_EMAIL);
+			copy.textContent = "Copied";
+		} catch {
+			const range = document.createRange();
+			range.selectNodeContents(document.getElementById("mail")!);
+			const sel = getSelection();
+			sel?.removeAllRanges();
+			sel?.addRange(range);
+			copy.textContent = "Selected, press copy";
+		}
+		setTimeout(() => (copy.textContent = "Copy email"), 1800);
+	});
+</script>
