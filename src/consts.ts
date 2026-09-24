@@ -7,6 +7,7 @@ export const SITE_DESCRIPTION =
 	'Infrastructure engineer in Madrid. Building things that close the gap between people and what they need.';
 export const SITE_TWITTER_HANDLE = '@arrrnmp';
 
+/** English contact address (llms.txt); pages take theirs from src/i18n/ui.ts (hola@ in Spanish). */
 export const SITE_EMAIL = 'hello@aaronmompie.com';
 export const SITE_GITHUB_URL = 'https://github.com/arrrnmp';
 export const SITE_LINKEDIN_URL = 'https://www.linkedin.com/in/aaron-mompie/';

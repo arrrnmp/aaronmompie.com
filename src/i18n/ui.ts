@@ -22,6 +22,7 @@ const en = {
 		role: 'Infrastructure engineer',
 		description: 'Infrastructure engineer in Madrid. Building things that close the gap between people and what they need.',
 		cv: '/cv_en.pdf',
+		email: 'hello@aaronmompie.com',
 	},
 	nav: {
 		label: 'Primary',
@@ -194,6 +195,7 @@ const es: typeof en = {
 		role: 'Técnico de infraestructura',
 		description: 'Técnico de infraestructura en Madrid. Construyo cosas que acortan la distancia entre las personas y lo que necesitan.',
 		cv: '/cv_es.pdf',
+		email: 'hola@aaronmompie.com',
 	},
 	nav: {
 		label: 'Principal',
