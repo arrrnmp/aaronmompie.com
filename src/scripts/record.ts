@@ -6,8 +6,7 @@
  * half out and the tonearm comes in. Play pulls the record out further, spins it
  * and drops the arm. Text changes only once each move has landed.
  */
-import { reducedMotion } from "./dot-field";
-
+const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 type Side = "A" | "B";
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -67,8 +66,9 @@ export function initRecord() {
 	if (!deck || !audio) return;
 	const L = JSON.parse($("sides").dataset.strings ?? "{}") as Record<string, string>;
 
-	// Fonts are self-hosted under hashed family names; read the real one off the page.
-	const cond = getComputedStyle($("hint").closest(".sides")!.querySelector(".cond")!).fontFamily;
+	// Fonts are self-hosted under hashed family names; read the real one off the page
+	// (once the art is drawn, so loading the page never waits on a style recalc).
+	let cond = "";
 
 	const art: Partial<Record<Side, { cover: HTMLCanvasElement; label: HTMLCanvasElement }>> = {};
 	const cover = (side: Side, img: HTMLImageElement) => {
@@ -112,19 +112,42 @@ export function initRecord() {
 	};
 
 	let side: Side = "A";
-	Promise.all([
-		loadImage("/media/head-density.png"),
-		loadImage("/media/body-density.png"),
-		loadImage("/media/cover-a.webp"),
-		loadImage("/media/cover-b.webp"),
-		// Only the real face; its size-matched fallback can point at a local font that is missing.
-		document.fonts.load(`900 112px ${cond.split(",")[0]}`).catch(() => []),
-	]).then(([head, body, coverA, coverB]) => {
-		art.A = { cover: cover("A", coverA), label: label("A", head, body) };
-		art.B = { cover: cover("B", coverB), label: label("B", head, body) };
-		paint($<HTMLCanvasElement>("cover"), art[side]!.cover);
-		paint($<HTMLCanvasElement>("labelArt"), art[side]!.label);
-	});
+	// The art takes a few hundred milliseconds of drawing on a phone, so it waits until the
+	// record is about to scroll into view, and the side that isn't showing waits for idle time.
+	const idle = (fn: () => void) => ("requestIdleCallback" in window ? requestIdleCallback(fn, { timeout: 2000 }) : setTimeout(fn, 200));
+	const breathe = () => new Promise<void>((r) => setTimeout(r));
+	let shared: Promise<[HTMLImageElement, HTMLImageElement]> | undefined;
+	const load = () =>
+		(shared ??= (async () => {
+			cond = getComputedStyle($("sides").querySelector(".cond")!).fontFamily;
+			const [head, body] = await Promise.all([
+				loadImage("/media/head-density.png"),
+				loadImage("/media/body-density.png"),
+				// Only the real face; its size-matched fallback can point at a local font that is missing.
+				document.fonts.load(`900 112px ${cond.split(",")[0]}`).catch(() => []),
+			]);
+			return [head, body];
+		})());
+	const builds: Partial<Record<Side, Promise<void>>> = {};
+	const build = (s: Side) =>
+		(builds[s] ??= (async () => {
+			const [[head, body], img] = await Promise.all([load(), loadImage(s === "A" ? "/media/cover-a.webp" : "/media/cover-b.webp")]);
+			const c = cover(s, img);
+			await breathe();
+			art[s] = { cover: c, label: label(s, head, body) };
+			if (s === side) {
+				paint($<HTMLCanvasElement>("cover"), art[s]!.cover);
+				paint($<HTMLCanvasElement>("labelArt"), art[s]!.label);
+			}
+		})());
+	new IntersectionObserver(
+		(es, io) => {
+			if (!es[0].isIntersecting) return;
+			io.disconnect();
+			build(side).then(() => idle(() => build(side === "A" ? "B" : "A")));
+		},
+		{ rootMargin: "600px" },
+	).observe(deck);
 
 	let busy = false;
 	async function setSide(s: Side) {
@@ -143,6 +166,7 @@ export function initRecord() {
 		}
 		sleeve.classList.add("flip-out");
 		await wait(130);
+		if (!art[s]) await build(s);
 		if (art[s]) {
 			paint($<HTMLCanvasElement>("cover"), art[s]!.cover);
 			paint($<HTMLCanvasElement>("labelArt"), art[s]!.label);

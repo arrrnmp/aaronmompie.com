@@ -33,9 +33,9 @@ const h = ui.hero;
 </div>
 
 <script>
-	import { DotField } from "../../scripts/dot-field";
+	import { compact, DotField } from "../../scripts/dot-field";
 
-	const phone = innerWidth < 820;
+	const phone = compact.matches;
 	new DotField(document.getElementById("heroDots") as HTMLCanvasElement, "/media/head-density.png", {
 		count: phone ? 7000 : 15000,
 		stillCount: phone ? 24000 : 40000,
