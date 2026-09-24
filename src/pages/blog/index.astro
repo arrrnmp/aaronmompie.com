@@ -4,7 +4,6 @@ import BaseHead from "../../components/BaseHead.astro";
 import Footer from "../../components/Footer.astro";
 import ContactSection from "../../components/ContactSection.astro";
 import Header from "../../components/Header.astro";
-import { SITE_TITLE } from "../../consts";
 import { getReadingTime } from "../../utils/reading-time";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
@@ -18,7 +17,7 @@ const year = new Date().getFullYear();
 <html lang="en">
 	<head>
 		<BaseHead
-			title={`Writing — ${SITE_TITLE}`}
+			title="Writing"
 			description="Essays and notes on systems, software, and the rest."
 		/>
 	</head>

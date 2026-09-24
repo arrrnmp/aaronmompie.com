@@ -3,16 +3,22 @@ import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import ContactSection from "../components/ContactSection.astro";
 import Header from "../components/Header.astro";
-import { PROJECTS, SITE_TITLE } from "../consts";
+import { getCollection, render } from "astro:content";
 
 const year = new Date().getFullYear();
+
+const projects = await Promise.all(
+	(await getCollection("projects", ({ data }) => !data.draft))
+		.sort((a, b) => a.data.order - b.data.order)
+		.map(async (entry) => ({ ...entry.data, id: entry.id, Content: (await render(entry)).Content })),
+);
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead
-			title={`Work — ${SITE_TITLE}`}
+			title="Work"
 			description="Infrastructure, control planes, pipelines. The systems you're not supposed to notice."
 		/>
 	</head>
@@ -55,11 +61,11 @@ const year = new Date().getFullYear();
 					<div class="section-header reveal">
 						<span class="eyebrow"><span class="num">§ 01</span>Selected work</span>
 						<span class="section-all-link is-static">
-							{PROJECTS.length} {PROJECTS.length === 1 ? "entry" : "entries"}
+							{projects.length} {projects.length === 1 ? "entry" : "entries"}
 						</span>
 					</div>
 					<div class="proj-list">
-						{PROJECTS.map((project, i) => (
+						{projects.map((project, i) => (
 							<article
 								class="proj-item reveal"
 								style={`--reveal-delay: ${0.05 + i * 0.08}s`}
@@ -70,9 +76,9 @@ const year = new Date().getFullYear();
 								<div class="proj-item-body">
 									<h2 class="proj-item-title">{project.title}</h2>
 									<div class="proj-item-role">{project.role}</div>
-									<p class="proj-item-desc">
-										{project.longDescription}
-									</p>
+									<div class="proj-item-desc">
+										<project.Content />
+									</div>
 									<div class="proj-item-stack">
 										{project.techStack.map((tech, idx) => (
 											<span class="stack-item">
@@ -208,6 +214,15 @@ const year = new Date().getFullYear();
 		color: var(--ink-2);
 		margin: 32px 0 0;
 		max-width: 60ch;
+	}
+
+	/* The description is rendered Markdown, so its paragraphs aren't scoped to this page. */
+	.proj-item-desc :global(p) {
+		margin: 0;
+	}
+
+	.proj-item-desc :global(p + p) {
+		margin-top: 1em;
 	}
 
 	.proj-item-stack {

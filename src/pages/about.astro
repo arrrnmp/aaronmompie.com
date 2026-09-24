@@ -3,7 +3,7 @@ import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import ContactSection from "../components/ContactSection.astro";
 import Header from "../components/Header.astro";
-import { SITE_TITLE, SITE_DESCRIPTION, SITE_LINKEDIN_URL, SITE_X_URL, SITE_INSTAGRAM_URL } from "../consts";
+import { SITE_TITLE, SITE_ROLE, SITE_DESCRIPTION, SITE_CV_URL, SITE_EMAIL, SITE_LINKEDIN_URL, SITE_X_URL, SITE_INSTAGRAM_URL } from "../consts";
 
 const year = new Date().getFullYear();
 
@@ -11,12 +11,12 @@ const personJsonLd = JSON.stringify({
 	"@context": "https://schema.org",
 	"@type": "Person",
 	name: SITE_TITLE,
-	url: "https://aaronmompie.com",
+	url: Astro.site?.toString(),
 	description: SITE_DESCRIPTION,
-	jobTitle: "Engineer",
+	jobTitle: SITE_ROLE,
 	address: { "@type": "PostalAddress", addressLocality: "Madrid", addressCountry: "ES" },
 	sameAs: [SITE_LINKEDIN_URL, SITE_X_URL, SITE_INSTAGRAM_URL],
-	knowsAbout: ["Systems Engineering", "Infrastructure", "TypeScript", "Swift", "Python", "Writing"],
+	knowsAbout: ["Infrastructure", "Virtualization", "Proxmox", "Linux", "Windows Server", "Networking", "Self-hosting", "Local LLM inference"],
 });
 ---
 
@@ -24,10 +24,10 @@ const personJsonLd = JSON.stringify({
 <html lang="en">
 	<head>
 		<BaseHead
-			title={`About — ${SITE_TITLE}`}
-			description="Madrid born and raised. Engineer and writer. Building things that close the gap between people and what they need."
+			title="About"
+			description={`Madrid born and raised. ${SITE_ROLE}. Building things that close the gap between people and what they need.`}
 		/>
-		<script type="application/ld+json" set:html={personJsonLd} />
+		<script is:inline type="application/ld+json" set:html={personJsonLd} />
 	</head>
 	<body>
 		<a href="#main" class="sr-only skip-link">Skip to content</a>
@@ -55,7 +55,7 @@ const personJsonLd = JSON.stringify({
 						</div>
 						<div class="hero-grid-right">
 							<p class="lead">
-								Engineer and writer. ADHD, Asperger's, gifted.
+								{SITE_ROLE}. ADHD, Asperger's, gifted.
 								Building things that close the gap between people
 								and what they need.
 							</p>
@@ -64,13 +64,39 @@ const personJsonLd = JSON.stringify({
 				</div>
 			</section>
 
-			{/* Origin + Now */}
+			{/* Now + Path */}
 			<section class="section">
 				<div class="container">
 					<div class="about-grid reveal">
 						<div class="about-block">
 							<span class="eyebrow about-block-eyebrow">
-								<span class="num">§ 01</span>Origin
+								<span class="num">§ 01</span>Now
+							</span>
+							<div class="about-prose">
+								<p>
+									CFGM in Microcomputer Systems and Networks: done
+									(2024–2026). Now I'm choosing what comes next, and I'm
+									choosing carefully: infrastructure, with people who care
+									how things run. If that's you, <a href={`mailto:${SITE_EMAIL}`}>write me</a>.
+								</p>
+								<p>
+									Most of my hours go into the homelab: a Proxmox cluster
+									built from hardware other people retired, running my own
+									Matrix and Nextcloud, plus local AI inference on my
+									workstation. Everything self-hosted, everything mine to fix.
+								</p>
+								<p>
+									Outside that: building independently, when my ADHD lands
+									somewhere. Not always on a schedule. But when it hits,
+									it hits hard. And lately, music: learning to produce and to
+									sing. Early days, solid foundations.
+								</p>
+							</div>
+						</div>
+
+						<div class="about-block">
+							<span class="eyebrow about-block-eyebrow">
+								<span class="num">§ 02</span>Path
 							</span>
 							<div class="about-prose">
 								<p>
@@ -79,46 +105,30 @@ const personJsonLd = JSON.stringify({
 									cared more about how the server worked than what I was
 									building on top of it. The systems instinct was already
 									there before I had a name for it. By thirteen: TypeScript
-									and Discord bots. By the time I was a teenager I'd reached
-									most of the technical foundations I still carry.
+									and Discord bots.
 								</p>
 								<p>
-									The CFGM in Microcomputer Systems and Networks
-									(Sep 2024 – Jun 2026) is the formal credential.
-									More paper trail than origin story.
+									In 2023, product and community manager at Turing AI
+									(later acquired by shapes.inc): the user experience for
+									767,000+ people, and helping put its AI APIs behind
+									RabbitMQ load balancing as it grew.
 								</p>
 								<p>
-									Then burnout hit. A hard stop.
+									The CFGM is the formal credential. More paper trail than
+									origin story. Then burnout hit. A hard stop.
 								</p>
 								<p>
 									The homelab brought me back — started it in May 2025.
 									Fixing real errors on real machines, with actual
 									consequences, fixed something in me too. It still does.
-								</p>
-							</div>
-						</div>
-
-						<div class="about-block">
-							<span class="eyebrow about-block-eyebrow">
-								<span class="num">§ 02</span>Now
-							</span>
-							<div class="about-prose">
-								<p>
-									Practice hours at <a href="https://abalun.com" target="_blank" rel="noreferrer">Abalun</a> — technically not employed, but
-									pulled into real work fast enough that the line blurs.
-									Good colleagues, real problems, a rhythm that doesn't
-									grind. What it's mostly done is kill the impostor
-									syndrome. Not therapy, not a book — just being thrown at
-									actual problems and realising I could handle them. Turns
-									out the impostor was the lie, not me.
+									Around it: building servers at Ibertronica, and practice
+									hours at <a href="https://abalun.com" target="_blank" rel="noreferrer">Abalun</a>,
+									where I was pulled into real work fast enough that the
+									line blurred. What it mostly did was kill the impostor
+									syndrome. Turns out the impostor was the lie, not me.
 								</p>
 								<p>
-									Outside that: building independently, when my ADHD lands
-									somewhere. Not always on a schedule. But when it hits,
-									it hits hard.
-								</p>
-								<p>
-									Running most mornings. Madrid, for now.
+									The dates and details are in the <a href={SITE_CV_URL}>CV</a>.
 								</p>
 							</div>
 						</div>
@@ -165,8 +175,8 @@ const personJsonLd = JSON.stringify({
 								to you, and doesn't send anything anywhere.
 							</p>
 							<p>
-								I build to close that gap. The dramatic arts draw me for the
-								same reason: theatre doesn't create emotion — it removes the
+								I build to close that gap. Music pulls at me for the same
+								reason: a good song doesn't create emotion — it removes the
 								obstacle to it. Same work, different tools.
 							</p>
 						</div>

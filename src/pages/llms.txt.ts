@@ -1,10 +1,13 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
-import { PROJECTS, SITE_DESCRIPTION, SITE_EMAIL, SITE_LINKEDIN_URL, SITE_TITLE, SITE_X_URL } from "../consts";
+import { SITE_DESCRIPTION, SITE_EMAIL, SITE_LINKEDIN_URL, SITE_TITLE, SITE_X_URL } from "../consts";
 
 // https://llmstxt.org — a Markdown map of the site for language models.
 export const GET: APIRoute = async ({ site }) => {
 	const url = (path: string) => new URL(path, site).toString();
+	const projects = (await getCollection("projects", ({ data }) => !data.draft)).sort(
+		(a, b) => a.data.order - b.data.order,
+	);
 	const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
 		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 	);
@@ -24,7 +27,7 @@ export const GET: APIRoute = async ({ site }) => {
 		"",
 		"## Projects",
 		"",
-		...PROJECTS.map((p) => `- [${p.title}](${p.url ?? p.github ?? url("/projects/")}): ${p.description}`),
+		...projects.map(({ data: p }) => `- [${p.title}](${p.url ?? p.github ?? url("/projects/")}): ${p.description}`),
 		...(posts.length > 0
 			? ["", "## Writing", "", ...posts.map((p) => `- [${p.data.title}](${url(`/blog/${p.id}/`)}): ${p.data.description}`)]
 			: []),
