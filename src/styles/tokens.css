@@ -1,0 +1,58 @@
+/* ============================================================
+   Aaron Mompié — Editorial Design System
+   Stark paper-white, oversized heavy display, one decisive
+   accent. Instrument Serif as editorial italic, Archivo across
+   its width axis as the workhorse.
+   ============================================================ */
+
+:root {
+	/* Paper & Ink */
+	--paper: #f6f4ef;
+	--paper-pure: #ffffff;
+	--paper-2: #edeae3;
+	--paper-3: #e2ded5;
+
+	--ink: #0b0b0a;
+	--ink-2: #1c1b19;
+	--ink-3: #55534e;
+	--ink-4: #6e6b65;
+	--ink-5: #b8b4ab;
+
+	/* Accent — deep ember red */
+	--accent: #e8351f;
+	--accent-ink: #b02512;
+	--accent-soft: #f8d9d3;
+	--on-accent: #ffffff;
+
+	/* Legacy-compat aliases (keep existing class rules working) */
+	--bg: var(--paper);
+	--bg-soft: var(--paper-2);
+	--panel: var(--paper-pure);
+	--panel-soft: var(--paper-2);
+	--text: var(--ink);
+	--text-muted: var(--ink-3);
+	--line: var(--paper-3);
+	--line-strong: #cfcac0;
+	--accent-soft-bg: var(--accent-soft);
+	--accent-warm: var(--accent);
+	--accent-hover: var(--accent-ink);
+
+	/* Type families */
+	--font-display: var(--font-archivo);
+	--font-sans: var(--font-archivo);
+	--font-serif: var(--font-instrument-serif);
+	--font-condensed: var(--font-archivo);
+	--font-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+
+	/* Motion */
+	--ease-standard: cubic-bezier(0.2, 0.6, 0.2, 1);
+	--dur-instant: 80ms;
+	--dur-fast: 160ms;
+	--dur-base: 220ms;
+	--dur-slow: 420ms;
+
+	/* Layout */
+	--container-narrow: 720px;
+	--container-wide: 1360px;
+	--max-width: 1080px;
+}

@@ -1,0 +1,171 @@
+/* -- Homepage hero ------------------------------------------- */
+
+.hero-grid {
+	display: grid;
+	grid-template-columns: 1fr 1.2fr;
+	gap: 40px;
+	margin-top: 64px;
+	align-items: start;
+}
+
+.hero-grid-serif {
+	font-family: var(--font-serif);
+	font-style: italic;
+	font-size: 28px;
+	line-height: 1.25;
+	color: var(--ink);
+}
+
+.hero-grid-right {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	padding-top: 6px;
+}
+
+.hero-actions {
+	display: flex;
+	gap: 12px;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.hero-socials {
+	display: flex;
+	gap: 10px;
+}
+
+.social-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: 0;
+	border: 1px solid var(--ink);
+	color: var(--ink);
+	text-decoration: none;
+	transition:
+		color var(--dur-fast) var(--ease-standard),
+		background var(--dur-fast) var(--ease-standard),
+		border-color var(--dur-fast) var(--ease-standard);
+}
+
+.social-link:hover {
+	color: var(--paper);
+	background: var(--ink);
+	border-color: var(--ink);
+}
+
+/* Selected work header */
+
+.section-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	margin-bottom: 40px;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+.section-all-link {
+	font-family: var(--font-sans);
+	font-size: 14px;
+	color: var(--ink);
+	text-decoration: none;
+	display: inline-block;
+	position: relative;
+	padding-bottom: 3px;
+	transition:
+		color var(--dur-fast) var(--ease-standard),
+		transform var(--dur-base) var(--ease-standard);
+}
+
+.section-all-link::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 1px;
+	background: currentColor;
+	transform-origin: left;
+	transition: transform 0.35s var(--ease-standard);
+}
+
+.section-all-link:hover {
+	color: var(--accent);
+	transform: translateX(4px);
+}
+
+/* Now section */
+
+.now-grid {
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	gap: 40px;
+	align-items: start;
+}
+
+.now-statement {
+	font-family: var(--font-display);
+	font-weight: 900;
+	font-size: clamp(32px, 4vw, 56px);
+	line-height: 1.05;
+	letter-spacing: -0.025em;
+	color: var(--ink);
+	margin: 0;
+	max-width: 640px;
+}
+
+.now-statement em {
+	font-family: var(--font-serif);
+	font-weight: 400;
+	font-style: italic;
+	transition: color var(--dur-slow) var(--ease-standard);
+}
+
+.now-statement em:hover {
+	color: var(--accent);
+}
+
+.now-meta {
+	margin-top: 20px;
+	font-family: var(--font-sans);
+	font-size: 13px;
+	color: var(--ink-3);
+}
+
+/* Contact teaser */
+
+/* Size the email from its container's width so it always fits on one line. */
+.contact-fit {
+	container-type: inline-size;
+	margin-top: 24px;
+}
+
+.contact-huge {
+	display: block;
+	width: fit-content;
+	max-width: 100%;
+	margin-inline: auto;
+	text-decoration: none;
+	border-bottom: 4px solid var(--ink);
+	padding-bottom: 8px;
+	font-family: var(--font-display);
+	font-weight: 900;
+	font-style: italic;
+	font-size: min(4.75rem, 7.45cqi);
+	letter-spacing: -0.03em;
+	line-height: 1;
+	color: var(--ink);
+	white-space: nowrap;
+	transition:
+		color var(--dur-base) var(--ease-standard),
+		border-color var(--dur-base) var(--ease-standard);
+}
+
+.contact-huge:hover {
+	color: var(--accent);
+	border-bottom-color: var(--accent);
+}

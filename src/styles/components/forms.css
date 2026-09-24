@@ -1,0 +1,31 @@
+/* -- Form inputs --------------------------------------------- */
+
+.form-label {
+	display: block;
+	margin-bottom: 6px;
+	font-family: var(--font-condensed);
+	font-size: 10px;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.22em;
+	color: var(--ink-3);
+}
+
+.form-input,
+.form-textarea {
+	width: 100%;
+	background: transparent;
+	border: none;
+	border-bottom: 1px solid var(--ink);
+	font-family: var(--font-sans);
+	font-size: 18px;
+	color: var(--ink);
+	padding: 8px 0;
+	border-radius: 0;
+	outline: none;
+	box-sizing: border-box;
+}
+
+.form-textarea {
+	resize: vertical;
+}

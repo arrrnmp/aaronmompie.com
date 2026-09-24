@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseHead from "../../components/BaseHead.astro";
 import Footer from "../../components/Footer.astro";
+import ContactSection from "../../components/ContactSection.astro";
 import Header from "../../components/Header.astro";
 import { SITE_TITLE } from "../../consts";
 import { getReadingTime } from "../../utils/reading-time";
@@ -107,17 +108,7 @@ const year = new Date().getFullYear();
 				</section>
 			)}
 
-			{/* Contact teaser */}
-			<section class="section">
-				<div class="container reveal">
-					<div class="section-header">
-						<span class="eyebrow"><span class="num">§ 02</span>Contact</span>
-					</div>
-					<a href="mailto:hello@aaronmompie.com" class="contact-huge">
-						hello@aaronmompie.com<span class="caret" aria-hidden="true"></span>
-					</a>
-				</div>
-			</section>
+			<ContactSection number="02" />
 
 		</main>
 		<Footer />

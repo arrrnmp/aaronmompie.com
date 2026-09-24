@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import type { ImageMetadata } from "astro";
 import { SITE_TITLE, SITE_TWITTER_HANDLE } from "../consts";
@@ -101,21 +102,9 @@ const ogImageAlt = imageAlt ?? `${fullTitle} — ${description}`;
 <meta name="generator" content={Astro.generator} />
 <meta name="theme-color" content="#E8351F" />
 
-<!-- Font preloads -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-	rel="preload"
-	as="style"
-	href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Instrument+Serif:ital@0;1&display=swap"
-	onload="this.onload=null;this.rel='stylesheet'"
-/>
-<noscript>
-	<link
-		href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Instrument+Serif:ital@0;1&display=swap"
-		rel="stylesheet"
-	/>
-</noscript>
+<!-- Self-hosted fonts (configured in astro.config.mjs) -->
+<Font cssVariable="--font-archivo" preload={[{ style: "normal", subset: "latin" }]} />
+<Font cssVariable="--font-instrument-serif" />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />

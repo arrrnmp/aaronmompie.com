@@ -8,6 +8,7 @@ import Header from "../components/Header.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import { SITE_TITLE } from "../consts";
 import { getReadingTime } from "../utils/reading-time";
+import { slugify } from "../utils/slug";
 
 interface Heading {
 	depth: number;
@@ -99,7 +100,7 @@ const jsonLd = {
 									<div class="article-tags">
 										{tags.map((tag) => (
 											<a
-												href={`/blog/tag/${tag}/`}
+												href={`/blog/tag/${slugify(tag)}/`}
 												class="tag-pill"
 											>
 												{tag}
