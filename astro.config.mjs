@@ -15,25 +15,36 @@ export default defineConfig({
 
   integrations: [mdx(), sitemap()],
 
-  // Downloaded at build time and served from our own domain (both are OFL-licensed).
+  // Downloaded at build time and served from our own domain (all three are OFL-licensed).
   fonts: [
     {
       provider: fontProviders.google(),
-      name: 'Archivo',
-      cssVariable: '--font-archivo',
-      weights: ['100 900'],
-      styles: ['normal', 'italic'],
+      name: 'Unbounded',
+      cssVariable: '--font-unbounded',
+      weights: ['500 900'],
+      styles: ['normal'],
       subsets: ['latin', 'latin-ext'],
-      fallbacks: ['ui-sans-serif', 'system-ui', 'sans-serif'],
+      fallbacks: ['Arial Black', 'sans-serif'],
     },
     {
       provider: fontProviders.google(),
-      name: 'Instrument Serif',
-      cssVariable: '--font-instrument-serif',
-      weights: [400],
+      name: 'Big Shoulders',
+      cssVariable: '--font-big-shoulders',
+      weights: ['700 900'],
+      // The tall "Display" cut is the top of the optical-size axis.
+      options: { experimental: { variableAxis: { opsz: ['72'] } } },
+      styles: ['normal'],
+      subsets: ['latin', 'latin-ext'],
+      fallbacks: ['Arial Narrow', 'sans-serif'],
+    },
+    {
+      provider: fontProviders.google(),
+      name: 'Instrument Sans',
+      cssVariable: '--font-instrument-sans',
+      weights: ['400 700'],
       styles: ['normal', 'italic'],
       subsets: ['latin', 'latin-ext'],
-      fallbacks: ['Times New Roman', 'Georgia', 'serif'],
+      fallbacks: ['system-ui', 'sans-serif'],
     },
   ],
 

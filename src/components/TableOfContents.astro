@@ -16,10 +16,10 @@ const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 {
 	filtered.length >= 2 && (
 		<nav class="toc" aria-label="Table of contents">
-			<p class="toc-label">Contents</p>
-			<ol class="toc-list">
+			<span class="lbl">Contents</span>
+			<ol>
 				{filtered.map((h) => (
-					<li class={h.depth === 3 ? "toc-sub" : ""}>
+					<li class={h.depth === 3 ? "d3" : undefined}>
 						<a href={`#${h.slug}`}>{h.text}</a>
 					</li>
 				))}

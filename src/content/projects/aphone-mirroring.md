@@ -1,6 +1,6 @@
 ---
 title: "aPhone Mirroring"
-description: "Android on macOS, natively. The other side of the mirror."
+description: "Android on macOS, natively: SwiftUI on one side, Kotlin on the other, scrcpy in between."
 role: "Native Engineering"
 techStack: ["Swift", "SwiftUI", "Kotlin", "scrcpy", "TCP"]
 github: https://github.com/arrrnmp/aphone-mirroring

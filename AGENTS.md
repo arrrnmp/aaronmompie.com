@@ -28,76 +28,65 @@ There are no test or lint scripts. Before you finish a change, run `bun run chec
 
 ```
 src/
-├── assets/                 # Images processed by astro:assets
 ├── components/
-│   ├── BaseHead.astro      # <head>: SEO/OG/Twitter meta, self-hosted fonts, view transitions, page-load scripts
-│   ├── Header.astro        # Site header + mobile menu (transition:persist)
-│   ├── HeaderLink.astro    # Desktop nav link with active state
-│   ├── ContactSection.astro# Shared "Contact" section with the full-width email
-│   ├── Footer.astro
-│   ├── FormattedDate.astro
-│   └── TableOfContents.astro
-├── content/blog/           # Blog posts (.md/.mdx)
-├── content/projects/       # One .md per project; the body is the long description
-├── content.config.ts       # Collection schemas (blog, projects)
-├── consts.ts               # Site name, role (SITE_ROLE), email, CV and social URLs: import from here and never hardcode
+│   ├── BaseHead.astro        # <head>: SEO/OG/Twitter meta, self-hosted fonts
+│   ├── Header.astro          # Sticky header: AM mark (grows into the name), nav, Book me, phone menu
+│   ├── Finale.astro          # Full-screen blue contact footer, revealed as the page lifts off it
+│   ├── home/                 # Home sections: Hero (+ facts band), Experience, Projects, TwoSides (the record)
+│   ├── PostList.astro, TableOfContents.astro, FormattedDate.astro
+├── content/blog/             # Blog posts (.md/.mdx); all drafts for now, so "Writing" is hidden
+├── content/projects/         # One .md per project; the body is the long description; `featured: true` = the big card
+├── content.config.ts         # Collection schemas (blog, projects)
+├── data/experience.ts        # Work history, the Side A timeline (ages) and the facts band
+├── consts.ts                 # Site name, role (SITE_ROLE), email, CV and social URLs: import from here and never hardcode
 ├── layouts/
-│   ├── BlogPost.astro      # Article layout: TOC, reading time, tags, BlogPosting JSON-LD
-│   └── Page.astro          # Simple page layout (used by 404)
-├── pages/
-│   ├── index.astro         # Home: hero, latest writing (only if posts exist), contact
-│   ├── projects.astro      # Work: the projects collection, sorted by `order`
-│   ├── about.astro
-│   ├── 404.astro
-│   ├── blog/index.astro, blog/[...slug].astro, blog/tag/[tag].astro
-│   ├── rss.xml.js
-│   ├── llms.txt.ts         # /llms.txt (llmstxt.org), generated from consts, projects and posts
-│   └── og-image.png.ts     # Default OG image, rendered to PNG with sharp at build time
-├── styles/                 # See "Styling"
-└── utils/                  # nav.ts (active-link matching), slug.ts, reading-time.ts
-public/                     # Served as-is (favicon, robots.txt, cv.pdf)
+│   ├── Site.astro            # Every page: the "sheet" (header + content) over the fixed Finale footer
+│   └── BlogPost.astro        # Article layout: TOC, reading time, tags, BlogPosting JSON-LD
+├── pages/                    # index, about (the full story), projects (Work), 404, blog/…, rss.xml, llms.txt, og-image.png
+├── scripts/
+│   ├── dot-field.ts          # The dot portraits (hero and footer) with the photo reveal under the pointer
+│   └── record.ts             # The two-sided record: sleeve/record/tonearm moves, cover and label art, audio player
+├── styles/                   # See "Styling"
+└── utils/                    # nav.ts (active-link matching), slug.ts, reading-time.ts
+public/
+├── cv.pdf
+└── media/                    # Dot density maps, cut-out photos, record covers, its-complicated.mp3
 ```
 
 ## Styling
 
 - Plain CSS: there's no Tailwind or other framework. Write hand-made classes that use the design tokens.
-- `src/styles/global.css` is only an ordered list of `@import`s. **The import order is the cascade order**, so put new rules in the file that owns them and keep the order intact:
-  `reset` → `tokens` → `base` → `layout` → `typography` → `components/*` → `pages/*` → `motion` → `responsive` → `reduced-motion`.
+- `src/styles/global.css` is only an ordered list of `@import`s. **The import order is the cascade order**:
+  `reset` → `tokens` → `base` → `components/*` → `pages/*` → `responsive` → `reduced-motion`.
 - `reset.css` sits in `@layer base`, so any unlayered rule beats it.
-- The design tokens live on `:root` in `tokens.css` (`--paper*`, `--ink*`, `--accent*`, `--font-*`, motion and layout values). Use them instead of hardcoded values.
-- Page-only styles can go in a scoped `<style>` block in the page.
+- Tokens live on `:root` in `tokens.css`. The site is **dark-first**: bare `:root` is the dark palette, and `prefers-color-scheme: light` swaps in the light one. Key tokens: `--bg`, `--text`, `--muted`, `--line`, `--blue` (#2b3bff), `--blue-ink` (accent text), `--g` (side gutter), `--name` (size of the big name).
+- Breakpoints (in `responsive.css`): 1100px tablet, 820px tablet portrait and phones (collapsed nav, stacked hero), 640px phones.
+- Check new work at real browser sizes, not just 1440×900: 1920×937, 1536×730, 1366×657, iPad both ways, 390×844 and 360×740.
 
 ## Fonts
 
-- Archivo (variable, 100–900, roman and italic) and Instrument Serif (400, roman and italic) are configured in the `fonts` array of `astro.config.mjs`.
-- Astro downloads them at build time and serves them from our own domain. Both are SIL OFL 1.1, which allows self-hosting.
-- `BaseHead.astro` renders them with `<Font cssVariable="…" />`. `tokens.css` maps `--font-sans`, `--font-display` and `--font-serif` to those variables.
+- Unbounded (the big name, headings), Big Shoulders at its 72pt "Display" optical size (condensed uppercase labels and titles) and Instrument Sans (body). All three are SIL OFL and configured in the `fonts` array of `astro.config.mjs`; Astro downloads them at build time and serves them from our own domain.
+- `tokens.css` maps `--display`, `--cond` and `--sans` to the font variables. Use those tokens, never family names: Astro renames families with a hash. In canvas code, read the real family from an element's computed `fontFamily` (see `record.ts`).
 
-## Animation
+## Motion
 
-Both systems below respect `prefers-reduced-motion`; the overrides are in `reduced-motion.css`.
-
-1. **Entrance animations**: the `anim-fade-up`, `anim-fade-down`, `anim-slide-right` and `reveal-line` classes, staggered with the `--delay` custom property.
-   - On pages already visited this session they're skipped via `html.has-visited`, which `BaseHead.astro` sets from `sessionStorage`.
-   - Line reveals wait for `html.fonts-loaded`.
-2. **Scroll reveal**: `.reveal` becomes `.is-visible`. It's driven by one `IntersectionObserver` in `BaseHead.astro` that re-runs on every `astro:page-load`. Don't add observers in pages.
+- Everything that moves on its own (the dot portraits, the facts ticker, the spinning record) follows `prefers-reduced-motion`. Viewers who ask for less motion get the still stipple and a stopped ticker. Keep it that way for anything new.
+- There are no view transitions (`ClientRouter`); pages are plain multi-page navigations with hover prefetching.
 
 ## Conventions
 
-- **View transitions** (`ClientRouter`) are on:
-  - The header and mobile menu use `transition:persist`.
-  - `Header.astro` recomputes the active link on `astro:page-load` and closes the menu on `astro:before-swap`. Keep both.
-- **Active link matching**: use `isActivePath` from `src/utils/nav.ts`. The server (`HeaderLink.astro`) and the client script in `Header.astro` share it.
+- **Active nav link**: `Header.astro` marks the current page with `aria-current` using `isActivePath` from `src/utils/nav.ts`.
+- **Contact**: every page ends with the Finale footer (`id="contact"`); `href="#contact"` links scroll to the very bottom.
 - **Components**: `.astro` components declare a typed `Props` interface and destructure `Astro.props`.
 - **Blog content**:
   - Frontmatter needs `title`, `description` and `pubDate`. It can also have `updatedDate`, `heroImage` (an `image()` asset path relative to the post, not a URL), `draft` and `tags`.
   - `draft: true` hides a post everywhere: list, pages, tags, RSS, llms.txt and the nav's "Writing" link.
   - Tag URLs go through `slugify()`.
-  - The list and article views share `transition:name={`post-image-${post.id}`}`, so keep them in sync.
-- **Job title**: always `SITE_ROLE` ("Infrastructure engineer"). It's used in the footer, meta description, JSON-LD and OG image, so never type it out.
+- **Job title**: always `SITE_ROLE` ("Infrastructure engineer"). It's used in the hero, meta description, JSON-LD and OG image, so never type it out.
 - **Projects**:
-  - Frontmatter needs `title`, `description` (one line), `role`, `techStack` and `order`. It can also have `url`, `github`, `cover` (an `image()` screenshot next to the file), `featured` and `draft`.
-  - The Markdown body is the long description shown on the Work page.
+  - Frontmatter needs `title`, `description` (one line, used on the home cards and llms.txt), `role`, `techStack` and `order`. It can also have `url`, `github`, `cover`, `featured` and `draft`.
+  - The Markdown body is the long description shown on the Work page (and on the home page for the featured project).
+  - Exactly one project should be `featured: true`; it gets the big card on the home page.
 - **Images**: use `astro:assets` (`Image` / `Picture`) with `formats={["avif", "webp"]}`.
 - **Reading time**: `src/utils/reading-time.ts` counts 200 words per minute over the raw Markdown body.
 - **TypeScript**: strict mode. Avoid `any`, and use kebab-case filenames for utilities.

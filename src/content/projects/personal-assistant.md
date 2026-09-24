@@ -1,6 +1,6 @@
 ---
 title: "Personal Assistant"
-description: "A local-first macOS menu bar AI, connected to your own model, not someone else's."
+description: "A local-first macOS menu bar AI on your own model. No telemetry, no cloud."
 role: "Native Engineering"
 techStack: ["Swift", "SwiftUI", "LM Studio", "MCP"]
 github: https://github.com/arrrnmp/personal-assistant

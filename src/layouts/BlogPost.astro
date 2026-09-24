@@ -1,14 +1,12 @@
 ---
 import { Picture } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
-import BaseHead from "../components/BaseHead.astro";
-import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
-import Header from "../components/Header.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import { SITE_TITLE } from "../consts";
 import { getReadingTime } from "../utils/reading-time";
 import { slugify } from "../utils/slug";
+import Site from "./Site.astro";
 
 interface Heading {
 	depth: number;
@@ -22,108 +20,47 @@ type Props = CollectionEntry<"blog">["data"] & {
 	body?: string;
 };
 
-const { id, title, description, pubDate, updatedDate, heroImage, tags, headings = [], body = "" } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags, headings = [], body = "" } = Astro.props;
 const readingTime = getReadingTime(body);
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const jsonLd = {
+const jsonLd = JSON.stringify({
 	"@context": "https://schema.org",
 	"@type": "BlogPosting",
 	headline: title,
 	description,
 	datePublished: pubDate.toISOString(),
 	...(updatedDate && { dateModified: updatedDate.toISOString() }),
-	author: {
-		"@type": "Person",
-		name: SITE_TITLE,
-		url: Astro.site?.toString(),
-	},
+	author: { "@type": "Person", name: SITE_TITLE, url: Astro.site?.toString() },
 	publisher: { "@type": "Person", name: SITE_TITLE },
 	mainEntityOfPage: { "@type": "WebPage", "@id": canonicalURL.toString() },
-	...(heroImage && { image: new URL(heroImage.src, Astro.url).toString() }),
-};
+	...(heroImage && { image: new URL(heroImage.src, Astro.site).toString() }),
+});
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead
-			title={title}
-			description={description}
-			image={heroImage}
-			type="article"
-			publishedTime={pubDate}
-			modifiedTime={updatedDate}
-		/>
-		<script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-	</head>
-	<body>
-		<a href="#main" class="sr-only skip-link">Skip to content</a>
-		<Header />
-		<main id="main" class="site-main">
-			<section class="section">
-				<div class="container">
-					<article class="surface article-shell">
-						{
-							heroImage && (
-								<div class="article-cover">
-									<Picture
-										width={1120}
-										height={620}
-										src={heroImage}
-										alt={title}
-										formats={["avif", "webp"]}
-										sizes="(max-width: 768px) 100vw, 1120px"
-										transition:name={`post-image-${id}`}
-									/>
-								</div>
-							)
-						}
-
-						<div class="article-meta">
-							<p class="date">
-								<FormattedDate date={pubDate} />
-								{
-									updatedDate && (
-										<span>
-											· Updated{" "}
-											<FormattedDate date={updatedDate} />
-										</span>
-									)
-								}
-								<span>· {readingTime} min read</span>
-							</p>
-							<h1 class="article-title">{title}</h1>
-							<p class="article-description">{description}</p>
-							{
-								tags.length > 0 && (
-									<div class="article-tags">
-										{tags.map((tag) => (
-											<a
-												href={`/blog/tag/${slugify(tag)}/`}
-												class="tag-pill"
-											>
-												{tag}
-											</a>
-										))}
-									</div>
-								)
-							}
-						</div>
-
-						<TableOfContents headings={headings} />
-
-						<div class="article-content">
-							<slot />
-						</div>
-
-						<div class="article-footer">
-							<a href="#main" class="back-to-top">↑ Back to top</a>
-						</div>
-					</article>
-				</div>
-			</section>
-		</main>
-		<Footer />
-	</body>
-</html>
+<Site title={title} description={description} image={heroImage} type="article" publishedTime={pubDate} modifiedTime={updatedDate}>
+	<script is:inline slot="head" type="application/ld+json" set:html={jsonLd} />
+	<article class="article">
+		<header class="article-head">
+			<a class="back" href="/blog/">← All writing</a>
+			<span class="lbl">Writing</span>
+			<h1 class="cond">{title}</h1>
+			<p>{description}</p>
+			<div class="meta">
+				<FormattedDate date={pubDate} />
+				{updatedDate && <span>Updated <FormattedDate date={updatedDate} /></span>}
+				<span>{readingTime} min read</span>
+				{tags.map((tag) => <a href={`/blog/tag/${slugify(tag)}/`}>#{tag}</a>)}
+			</div>
+		</header>
+		{
+			heroImage && (
+				<figure class="cover">
+					<Picture src={heroImage} alt="" width={1400} height={760} formats={["avif", "webp"]} sizes="(max-width: 1760px) 100vw, 1760px" />
+				</figure>
+			)
+		}
+		<div class="prose"><slot /></div>
+		<TableOfContents headings={headings} />
+	</article>
+</Site>

@@ -1,6 +1,6 @@
 ---
 title: "Discord MCP Server"
-description: "Your server's co-op. Every member, every channel, every action — one AI away."
+description: "80+ Discord API endpoints handed to an AI, behind a guild allowlist and dry-run mode."
 role: "Systems Engineering"
 techStack: ["TypeScript", "Bun", "MCP", "Discord API"]
 github: https://github.com/arrrnmp/discord-mcp

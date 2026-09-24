@@ -1,6 +1,6 @@
 ---
 title: "Staff Planner AI"
-description: "AI-assisted scheduling where the model parses intent and OR-Tools enforces the math."
+description: "Weekly scheduling where the model parses intent and OR-Tools enforces the math."
 role: "Design & Engineering"
 techStack: ["React 19", "Bun", "TypeScript", "Python", "OR-Tools", "PostgreSQL"]
 github: https://github.com/arrrnmp/staff-planner-ai

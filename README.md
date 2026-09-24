@@ -8,7 +8,7 @@ My personal site: who I am, what I build, and eventually what I write.
 
 - [Astro 6](https://astro.build), fully static, with MDX for writing
 - Plain CSS split into per-concern files (`src/styles/`), no framework
-- Self-hosted Archivo and Instrument Serif fonts through Astro's fonts API
+- Self-hosted Unbounded, Big Shoulders and Instrument Sans through Astro's fonts API
 - Deployed to **Cloudflare Workers** (static assets) with Workers Builds
 
 ## Develop

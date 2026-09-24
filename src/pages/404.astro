@@ -1,25 +1,12 @@
 ---
-import Layout from "../layouts/Page.astro";
+import Site from "../layouts/Site.astro";
 ---
 
-<Layout
-	title="Page not found"
-	description="The page you're looking for doesn't exist or has been moved."
->
-	<p>
-		This page doesn't exist. It may have been moved or removed entirely.
-	</p>
-	<div class="not-found-actions">
-		<a href="/" class="btn btn-primary">Back to home</a>
-		<a href="/projects" class="btn btn-ghost">See my work</a>
-	</div>
-</Layout>
-
-<style>
-	.not-found-actions {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.65rem;
-		margin-top: 1.5rem;
-	}
-</style>
+<Site title="Not found" description="This page doesn't exist, or it moved.">
+	<section class="lost">
+		<span class="lbl">Error 404</span>
+		<h1 class="cond">Wrong<br />groove.</h1>
+		<p>This page doesn't exist, or it moved. The record's still spinning at home.</p>
+		<div class="ctas"><a class="btn btn-blue" href="/">Back home ↗</a><a class="btn btn-line" href="/#work">See the work</a></div>
+	</section>
+</Site>

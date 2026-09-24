@@ -1,94 +1,61 @@
 ---
 import { getCollection } from "astro:content";
-import { SITE_TITLE, SITE_EMAIL, SITE_LINKEDIN_URL, SITE_X_URL, SITE_INSTAGRAM_URL } from "../consts";
+import { SITE_TITLE } from "../consts";
 import { isActivePath } from "../utils/nav";
-import HeaderLink from "./HeaderLink.astro";
 
-const publishedPosts = await getCollection("blog", ({ data }) => !data.draft);
-const hasWriting = publishedPosts.length > 0;
+const hasWriting = (await getCollection("blog", ({ data }) => !data.draft)).length > 0;
 
-const navLinks = [
-	{ href: "/", label: "Index" },
-	{ href: "/projects", label: "Work" },
-	...(hasWriting ? [{ href: "/blog", label: "Writing" }] : []),
+const links = [
+	{ href: "/#work", label: "Work" },
+	{ href: "/#experience", label: "Experience" },
 	{ href: "/about", label: "About" },
+	...(hasWriting ? [{ href: "/blog", label: "Writing" }] : []),
+	{ href: "#contact", label: "Contact" },
 ];
+const current = (href: string) => !href.includes("#") && isActivePath(Astro.url.pathname, href);
 ---
 
-<header class="site-header anim-fade-down" transition:persist>
-	<nav class="nav-bar" aria-label="Primary">
-		<a href="/" class="brand-name">{SITE_TITLE}</a>
-		<div class="nav-links">
-			{navLinks.map(({ href, label }) => <HeaderLink href={href}>{label}</HeaderLink>)}
-		</div>
-		<button
-			class="nav-hamburger"
-			aria-label="Open navigation menu"
-			aria-expanded="false"
-			aria-controls="mobile-menu"
-		>
-			<span class="nav-hamburger-bar"></span>
-			<span class="nav-hamburger-bar"></span>
-			<span class="nav-hamburger-bar"></span>
-		</button>
+<header class="top" id="top">
+	<a class="mark" href="/" aria-label={`${SITE_TITLE}, home`}>
+		<span class="mono" aria-hidden="true">AM</span>
+		<span class="mark-name" aria-hidden="true">{SITE_TITLE}</span>
+	</a>
+	<nav id="nav" aria-label="Primary">
+		{links.map(({ href, label }) => <a href={href} aria-current={current(href) ? "page" : undefined}>{label}</a>)}
 	</nav>
+	<div class="right">
+		<a class="btn btn-blue" href="#contact">Book me ↗</a>
+		<button class="menu-btn" id="menu" type="button" aria-expanded="false" aria-controls="nav" aria-label="Open menu">
+			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16"></path><path d="M4 16h16"></path></svg>
+		</button>
+	</div>
 </header>
 
-<div id="mobile-menu" class="mobile-menu" aria-hidden="true" transition:persist>
-	<nav class="mobile-menu-nav" aria-label="Mobile navigation">
-		{navLinks.map(({ href, label }) => (
-			<a
-				href={href}
-				class:list={["mobile-nav-link", { "is-active": isActivePath(Astro.url.pathname, href) }]}
-			>
-				{label}
-			</a>
-		))}
-	</nav>
-	<a href={`mailto:${SITE_EMAIL}`} class="mobile-menu-email">{SITE_EMAIL}</a>
-	<div class="mobile-menu-footer">
-		<div class="mobile-menu-socials">
-			<a href={SITE_LINKEDIN_URL} rel="noreferrer" target="_blank">LinkedIn</a>
-			<a href={SITE_X_URL} rel="noreferrer" target="_blank">X</a>
-			<a href={SITE_INSTAGRAM_URL} rel="noreferrer" target="_blank">Instagram</a>
-		</div>
-	</div>
-</div>
-
 <script>
-	import { isActivePath } from "../utils/nav";
+	const top = document.getElementById("top")!;
+	const nav = document.getElementById("nav")!;
+	const menu = document.getElementById("menu")!;
 
-	const btn = document.querySelector<HTMLButtonElement>(".nav-hamburger");
-	const menu = document.getElementById("mobile-menu");
-	const header = document.querySelector(".site-header");
-
-	// The header persists across view transitions, so the server-rendered
-	// active state goes stale after the first navigation; recompute it.
-	function updateActiveLinks() {
-		const current = window.location.pathname;
-		document.querySelectorAll<HTMLAnchorElement>(".nav-link").forEach((link) => {
-			const active = isActivePath(current, link.getAttribute("href") ?? "/");
-			link.classList.toggle("active", active);
-			if (active) link.setAttribute("aria-current", "page");
-			else link.removeAttribute("aria-current");
-		});
-		document.querySelectorAll<HTMLAnchorElement>(".mobile-nav-link").forEach((link) => {
-			link.classList.toggle("is-active", isActivePath(current, link.getAttribute("href") ?? "/"));
-		});
+	// On the home page the "AM" mark grows into the full name once the big name scrolls away.
+	const name = document.getElementById("name");
+	if (name) {
+		new IntersectionObserver((es) => top.classList.toggle("is-scrolled", !es[0].isIntersecting), {
+			rootMargin: "-60px 0px 0px 0px",
+		}).observe(name);
+	} else {
+		top.classList.add("is-scrolled");
 	}
 
-	function setMenuOpen(open: boolean) {
-		btn?.setAttribute("aria-expanded", String(open));
-		btn?.setAttribute("aria-label", open ? "Close navigation menu" : "Open navigation menu");
-		menu?.classList.toggle("is-open", open);
-		if (open) menu?.removeAttribute("aria-hidden");
-		else menu?.setAttribute("aria-hidden", "true");
-		header?.classList.toggle("menu-open", open);
-	}
-
-	btn?.addEventListener("click", () => setMenuOpen(!menu?.classList.contains("is-open")));
-
-	updateActiveLinks();
-	document.addEventListener("astro:page-load", updateActiveLinks);
-	document.addEventListener("astro:before-swap", () => setMenuOpen(false));
+	const setOpen = (open: boolean) => {
+		nav.classList.toggle("is-open", open);
+		menu.setAttribute("aria-expanded", String(open));
+		menu.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+	};
+	menu.addEventListener("click", () => setOpen(!nav.classList.contains("is-open")));
+	nav.addEventListener("click", (e) => {
+		if ((e.target as Element).closest("a")) setOpen(false);
+	});
+	document.addEventListener("keydown", (e) => {
+		if (e.key === "Escape") setOpen(false);
+	});
 </script>

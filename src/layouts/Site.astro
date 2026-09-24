@@ -1,0 +1,37 @@
+---
+import type { ImageMetadata } from "astro";
+import BaseHead from "../components/BaseHead.astro";
+import Finale from "../components/Finale.astro";
+import Header from "../components/Header.astro";
+
+interface Props {
+	title: string;
+	description: string;
+	image?: ImageMetadata;
+	type?: "website" | "article";
+	publishedTime?: Date;
+	modifiedTime?: Date;
+}
+
+const props = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead {...props} />
+		<slot name="head" />
+	</head>
+	<body>
+		<a href="#main" class="sr-only skip-link">Skip to content</a>
+		<!-- The page is a sheet that lifts off the footer at the end. -->
+		<div class="sheet" id="sheet">
+			<Header />
+			<main id="main">
+				<slot />
+			</main>
+			<div style="height: 48px" aria-hidden="true"></div>
+		</div>
+		<Finale />
+	</body>
+</html>
