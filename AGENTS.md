@@ -56,6 +56,7 @@ public/
 ├── cv_en.pdf, cv_es.pdf    # One CV per language
 ├── favicon.svg/.ico, apple-touch-icon.png, icon-*.png, site.webmanifest   # The blue AM mark
 └── media/                    # Dot density maps, cut-out photos, record covers, its-complicated.mp3
+video/                        # Separate Remotion (npm) project: the showcase video for X. Not part of the site build; see video/README.md
 ```
 
 ## Styling

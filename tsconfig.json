@@ -6,7 +6,8 @@
     "./worker-configuration.d.ts"
   ],
   "exclude": [
-    "dist"
+    "dist",
+    "video"
   ],
   "compilerOptions": {
     "strictNullChecks": true
