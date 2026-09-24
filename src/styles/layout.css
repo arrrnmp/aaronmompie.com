@@ -1,0 +1,40 @@
+/* -- Containers / sections ---------------------------------- */
+
+.site-main {
+	padding-top: 4rem;
+}
+
+.container {
+	width: 100%;
+	max-width: var(--max-width);
+	margin-inline: auto;
+	padding: 0 32px;
+}
+
+.container-wide {
+	width: 100%;
+	max-width: var(--container-wide);
+	margin-inline: auto;
+	padding: 0 32px;
+}
+
+.container-narrow {
+	width: 100%;
+	max-width: var(--container-narrow);
+	margin-inline: auto;
+	padding: 0 32px;
+}
+
+.section {
+	padding: 96px 0;
+	border-top: 1px solid var(--ink);
+}
+
+.section.section-first {
+	border-top: 0;
+	padding-top: 64px;
+}
+
+.section.section-sunken {
+	background: var(--paper-2);
+}

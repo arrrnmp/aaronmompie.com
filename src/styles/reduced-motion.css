@@ -1,0 +1,26 @@
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+
+	*, *::before, *::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+
+	.anim-fade-up,
+	.anim-fade-down,
+	.anim-slide-right,
+	.reveal,
+	.reveal-line-inner,
+	.accent-pulse,
+	.caret,
+	.mobile-menu.is-open,
+	.mobile-menu.is-open .mobile-nav-link,
+	.mobile-menu.is-open .mobile-menu-footer {
+		opacity: 1 !important;
+		transform: none !important;
+		animation: none !important;
+	}
+}

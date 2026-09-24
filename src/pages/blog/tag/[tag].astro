@@ -5,17 +5,21 @@ import BaseHead from "../../../components/BaseHead.astro";
 import Footer from "../../../components/Footer.astro";
 import FormattedDate from "../../../components/FormattedDate.astro";
 import Header from "../../../components/Header.astro";
-import { SITE_TITLE } from "../../../consts";
+import { slugify } from "../../../utils/slug";
 
 export async function getStaticPaths() {
 	const posts = await getCollection("blog", ({ data }) => !data.draft);
-	const tags = [...new Set(posts.flatMap((p) => p.data.tags))];
-	return tags.map((tag) => ({
-		params: { tag },
+	// Group by slug so "Home Lab" and "home-lab" share one page; show the first spelling seen.
+	const tags = new Map<string, string>();
+	for (const tag of posts.flatMap((p) => p.data.tags)) {
+		if (!tags.has(slugify(tag))) tags.set(slugify(tag), tag);
+	}
+	return [...tags].map(([slug, tag]) => ({
+		params: { tag: slug },
 		props: {
 			tag,
 			posts: posts
-				.filter((p) => p.data.tags.includes(tag))
+				.filter((p) => p.data.tags.some((t) => slugify(t) === slug))
 				.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
 		},
 	}));
@@ -28,7 +32,7 @@ const { tag, posts } = Astro.props;
 <html lang="en">
 	<head>
 		<BaseHead
-			title={`${SITE_TITLE} | Posts tagged: ${tag}`}
+			title={`Posts tagged: ${tag}`}
 			description={`Blog posts tagged with "${tag}".`}
 		/>
 	</head>

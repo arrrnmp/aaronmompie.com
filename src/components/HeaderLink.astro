@@ -1,24 +1,12 @@
 ---
 import type { HTMLAttributes } from "astro/types";
+import { isActivePath } from "../utils/nav";
 
 type Props = HTMLAttributes<"a">;
 
 const { href = "/", class: className, ...props } = Astro.props as Props;
 
-const normalizePath = (value: string) => {
-	const cleaned = value
-		.replace(import.meta.env.BASE_URL, "")
-		.replace(/\/+$/, "");
-	return cleaned === "" ? "/" : cleaned;
-};
-
-const currentPath = normalizePath(Astro.url.pathname);
-const targetPath = normalizePath(String(href));
-const isActive =
-	targetPath === "/"
-		? currentPath === "/"
-		: currentPath === targetPath ||
-			currentPath.startsWith(`${targetPath}/`);
+const isActive = isActivePath(Astro.url.pathname, String(href));
 ---
 
 <a

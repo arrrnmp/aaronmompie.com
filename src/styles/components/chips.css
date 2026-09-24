@@ -1,0 +1,54 @@
+/* -- Tag / filter chips -------------------------------------- */
+
+.chip-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.chip {
+	font-family: var(--font-condensed);
+	font-size: 12px;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.18em;
+	padding: 8px 14px;
+	border-radius: 0;
+	cursor: pointer;
+	background: transparent;
+	color: var(--ink);
+	border: 1px solid var(--ink);
+	text-decoration: none;
+	transition: all var(--dur-fast) var(--ease-standard);
+}
+
+.chip:hover,
+.chip.is-active {
+	background: var(--ink);
+	color: var(--paper);
+}
+
+.tag-pill {
+	display: inline-block;
+	padding: 0.28rem 0.65rem;
+	border-radius: 0;
+	border: 1px solid var(--ink-5);
+	font-family: var(--font-condensed);
+	font-size: 11px;
+	font-weight: 500;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	text-decoration: none;
+	color: var(--ink-3);
+	background: transparent;
+	transition:
+		color var(--dur-fast) var(--ease-standard),
+		border-color var(--dur-fast) var(--ease-standard),
+		background var(--dur-fast) var(--ease-standard);
+}
+
+.tag-pill:hover {
+	color: var(--paper);
+	border-color: var(--ink);
+	background: var(--ink);
+}

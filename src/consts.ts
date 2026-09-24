@@ -6,6 +6,7 @@ export const SITE_DESCRIPTION =
 	'Engineer and writer. Building things that close the gap between people and what they need. Madrid.';
 export const SITE_TWITTER_HANDLE = '@arrrnmp';
 
+export const SITE_EMAIL = 'hello@aaronmompie.com';
 export const SITE_CV_URL = '/cv.pdf';
 export const SITE_LINKEDIN_URL = 'https://www.linkedin.com/in/aaron-mompie/';
 export const SITE_X_URL = 'https://x.com/arrrnmp';

@@ -1,0 +1,87 @@
+/* -- Indexed row list (work / notes) ------------------------- */
+
+.irow-list {
+	display: flex;
+	flex-direction: column;
+}
+
+.irow {
+	display: grid;
+	grid-template-columns: 80px 1fr 160px 64px;
+	gap: 32px;
+	align-items: baseline;
+	padding: 24px 16px;
+	border-bottom: 1px solid var(--paper-3);
+	text-decoration: none;
+	color: var(--ink);
+	cursor: pointer;
+	transition: background var(--dur-fast) var(--ease-standard);
+}
+
+.irow:hover {
+	background: var(--paper-2);
+	color: var(--ink);
+}
+
+.irow:hover .irow-idx,
+.irow:hover .irow-arrow {
+	color: var(--accent);
+}
+
+.irow-idx {
+	font-family: var(--font-condensed);
+	font-weight: 500;
+	font-size: 13px;
+	letter-spacing: 0.18em;
+	color: var(--ink-3);
+	transition: color var(--dur-fast) var(--ease-standard);
+}
+
+.irow-title {
+	font-family: var(--font-display);
+	font-weight: 900;
+	font-size: clamp(28px, 3.2vw, 40px);
+	line-height: 1.02;
+	letter-spacing: -0.02em;
+	color: var(--ink);
+	transition: color var(--dur-base) var(--ease-standard);
+}
+
+.irow:hover .irow-title {
+	color: var(--accent);
+}
+
+.irow-subtitle {
+	font-family: var(--font-serif);
+	font-style: italic;
+	font-size: 17px;
+	color: var(--ink-3);
+	margin-top: 6px;
+	line-height: 1.35;
+	transition: color var(--dur-base) var(--ease-standard);
+}
+
+.irow:hover .irow-subtitle {
+	color: var(--ink);
+}
+
+.irow-meta {
+	font-family: var(--font-condensed);
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.18em;
+	color: var(--ink-4);
+}
+
+.irow-arrow {
+	text-align: right;
+	font-family: var(--font-sans);
+	color: var(--ink-3);
+	font-size: 20px;
+	display: inline-block;
+	transition: color var(--dur-fast) var(--ease-standard);
+}
+
+.irow:hover .irow-arrow {
+	color: var(--accent);
+}

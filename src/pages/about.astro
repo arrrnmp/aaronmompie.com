@@ -1,6 +1,7 @@
 ---
 import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
+import ContactSection from "../components/ContactSection.astro";
 import Header from "../components/Header.astro";
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_LINKEDIN_URL, SITE_X_URL, SITE_INSTAGRAM_URL } from "../consts";
 
@@ -233,17 +234,7 @@ const personJsonLd = JSON.stringify({
 				</div>
 			</section>
 
-			{/* Contact */}
-			<section class="section">
-				<div class="container reveal">
-					<div class="section-header">
-						<span class="eyebrow"><span class="num">§ 06</span>Contact</span>
-					</div>
-					<a href="mailto:hello@aaronmompie.com" class="contact-huge">
-						hello@aaronmompie.com<span class="caret" aria-hidden="true"></span>
-					</a>
-				</div>
-			</section>
+			<ContactSection number="06" />
 
 		</main>
 		<Footer />
