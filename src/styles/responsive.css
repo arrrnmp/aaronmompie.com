@@ -31,7 +31,7 @@
 /* Tablet portrait and phones: collapsed nav, stacked hero */
 @media (max-width:820px){
   .top nav{display:none}
-  .top nav.is-open{display:flex;flex-direction:column;gap:0;position:absolute;left:0;right:0;top:100%;background:var(--bg);border-bottom:2px solid var(--text);padding:8px var(--g)}
+  .mmenu:not([hidden]){display:flex}
   .menu-btn{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:6px;border:2px solid var(--text);background:transparent;color:var(--text);cursor:pointer}
   .top .right{gap:8px}
   .top .right .btn{display:none}

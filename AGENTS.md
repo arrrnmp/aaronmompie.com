@@ -30,7 +30,7 @@ There are no test or lint scripts. Before you finish a change, run `bun run chec
 src/
 ├── components/
 │   ├── BaseHead.astro        # <head>: SEO, hreflang, Open Graph/X tags, icons, theme colour, self-hosted fonts
-│   ├── Header.astro          # Sticky header: AM mark (grows into the name), nav, Hire me button, phone menu
+│   ├── Header.astro          # Sticky header: AM mark (grows into the name), nav, Hire me button, full-screen phone menu
 │   ├── Finale.astro          # Full-screen blue contact footer, revealed as the page lifts off it
 │   ├── home/                 # Home sections: Hero (+ facts band), Experience, Projects, TwoSides (the record)
 │   ├── PostList.astro, TableOfContents.astro, FormattedDate.astro

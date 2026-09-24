@@ -4,5 +4,6 @@
 }
 @media (prefers-reduced-motion: reduce){
   .ticker{animation:none}
+  .mmenu,.mmenu :is(.mmenu-nav a,.mmenu-hire,.mmenu-mail,.mmenu-foot),.menu-btn path{animation:none;transition:none}
   html{scroll-behavior:auto}
 }

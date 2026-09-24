@@ -19,3 +19,31 @@
 .theme-btn .moon{display:none}
 :root[data-theme="light"] .theme-btn .sun{display:none}
 :root[data-theme="light"] .theme-btn .moon{display:block}
+/* Mobile menu: full screen under the header, big condensed links, then the email and the socials. Shown from 820px down (responsive.css). */
+.menu-btn path{transform-origin:12px 12px;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.menu-btn[aria-expanded="true"] path:first-child{transform:translateY(4px) rotate(45deg)}
+.menu-btn[aria-expanded="true"] path:last-child{transform:translateY(-4px) rotate(-45deg)}
+.mmenu{display:none;position:fixed;top:calc(env(safe-area-inset-top,0px) + var(--top));left:0;right:0;bottom:0;z-index:9;flex-direction:column;background:var(--bg);overflow-y:auto;overscroll-behavior:contain;padding-bottom:env(safe-area-inset-bottom,0px);animation:mmenu-in .22s cubic-bezier(.16,1,.3,1)}
+html.menu-open{overflow:hidden}
+.mmenu-nav{display:flex;flex-direction:column;padding:8px var(--g) 0}
+.mmenu-nav a{display:flex;align-items:center;min-height:44px;padding:14px 0;border-bottom:2px solid var(--line);font-family:var(--cond);font-weight:800;font-size:clamp(40px,12vw,64px);line-height:1;text-transform:uppercase;letter-spacing:.02em;text-decoration:none;color:var(--text);transition:color .2s ease}
+.mmenu-nav a:last-child{border-bottom:0}
+.mmenu-nav a:hover,.mmenu-nav a[aria-current="page"]{color:var(--blue-ink)}
+.mmenu-hire{margin:auto var(--g) 0;justify-content:center}
+.mmenu-mail{padding:18px var(--g);text-align:center;font-size:16px;color:var(--muted);text-decoration:none}
+.mmenu-mail:hover{color:var(--text)}
+.mmenu-foot{display:flex;justify-content:space-between;gap:12px;border-top:2px solid var(--text);padding:8px var(--g)}
+.mmenu-foot a{display:inline-flex;align-items:center;min-height:44px;font-family:var(--cond);font-weight:800;font-size:18px;text-transform:uppercase;letter-spacing:.08em;text-decoration:none;color:var(--muted)}
+.mmenu-foot a:hover{color:var(--blue-ink)}
+/* Each line rises in after the one before it. */
+.mmenu :is(.mmenu-nav a,.mmenu-hire,.mmenu-mail,.mmenu-foot){animation:mmenu-link-in .45s cubic-bezier(.16,1,.3,1) var(--d,0s) both}
+.mmenu-nav a:nth-child(1){--d:.05s}
+.mmenu-nav a:nth-child(2){--d:.11s}
+.mmenu-nav a:nth-child(3){--d:.17s}
+.mmenu-nav a:nth-child(4){--d:.23s}
+.mmenu-nav a:nth-child(5){--d:.29s}
+.mmenu-hire{--d:.35s}
+.mmenu-mail{--d:.41s}
+.mmenu-foot{--d:.47s}
+@keyframes mmenu-in{from{opacity:0;transform:translateY(-6px)}}
+@keyframes mmenu-link-in{from{opacity:0;transform:translateY(18px)}}

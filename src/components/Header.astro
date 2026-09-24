@@ -1,12 +1,13 @@
 ---
 import { getCollection } from "astro:content";
-import { SITE_TITLE } from "../consts";
+import { SITE_GITHUB_URL, SITE_LINKEDIN_URL, SITE_TITLE, SITE_X_URL } from "../consts";
 import { alternate, langFromUrl, path } from "../i18n/routes";
 import { t } from "../i18n/ui";
 import { isActivePath } from "../utils/nav";
 
 const lang = langFromUrl(Astro.url);
-const ui = t(lang).nav;
+const copy = t(lang);
+const ui = copy.nav;
 const other = lang === "en" ? "es" : "en";
 const home = path("home", lang);
 const hasWriting = (await getCollection("blog", ({ data }) => !data.draft)).length > 0;
@@ -36,15 +37,30 @@ const current = (href: string) => !href.includes("#") && isActivePath(Astro.url.
 		</button>
 		<a class="icon-btn lang-btn" href={alternate(Astro.url.pathname, other)} hreflang={other} lang={other} aria-label={ui.langName}>{ui.langShort}</a>
 		<a class="btn btn-blue" href="#contact">{ui.hire}</a>
-		<button class="menu-btn" id="menu" type="button" aria-expanded="false" aria-controls="nav" aria-label={ui.openMenu} data-open={ui.openMenu} data-close={ui.closeMenu}>
+		<button class="menu-btn" id="menu" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label={ui.openMenu} data-open={ui.openMenu} data-close={ui.closeMenu}>
 			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16"></path><path d="M4 16h16"></path></svg>
 		</button>
 	</div>
 </header>
 
+<!-- Phones and tablet portrait: a full-screen menu under the header. -->
+<div class="mmenu" id="mobileMenu" hidden>
+	<nav class="mmenu-nav" aria-label={ui.label}>
+		{links.map(({ href, label }) => <a href={href} aria-current={current(href) ? "page" : undefined}>{label}</a>)}
+	</nav>
+	<a class="btn btn-blue mmenu-hire" href="#contact">{ui.hire}</a>
+	<a class="mmenu-mail" href={`mailto:${copy.meta.email}`}>{copy.meta.email}</a>
+	<div class="mmenu-foot">
+		<a href={SITE_LINKEDIN_URL} rel="noreferrer" target="_blank">LinkedIn</a>
+		<a href={SITE_GITHUB_URL} rel="noreferrer" target="_blank">GitHub</a>
+		<a href={SITE_X_URL} rel="noreferrer" target="_blank">X</a>
+		<a href={copy.meta.cv}>{copy.finale.cv}</a>
+	</div>
+</div>
+
 <script>
 	const top = document.getElementById("top")!;
-	const nav = document.getElementById("nav")!;
+	const mobileMenu = document.getElementById("mobileMenu")!;
 	const menu = document.getElementById("menu")!;
 	const themeBtn = document.getElementById("themeBtn")!;
 
@@ -59,17 +75,25 @@ const current = (href: string) => !href.includes("#") && isActivePath(Astro.url.
 	}
 
 	const setOpen = (open: boolean) => {
-		nav.classList.toggle("is-open", open);
+		if (open === !mobileMenu.hidden) return;
+		mobileMenu.hidden = !open;
+		document.documentElement.classList.toggle("menu-open", open);
 		menu.setAttribute("aria-expanded", String(open));
 		menu.setAttribute("aria-label", (open ? menu.dataset.close : menu.dataset.open) ?? "");
 	};
-	menu.addEventListener("click", () => setOpen(!nav.classList.contains("is-open")));
-	nav.addEventListener("click", (e) => {
+	menu.addEventListener("click", () => setOpen(mobileMenu.hidden));
+	mobileMenu.addEventListener("click", (e) => {
 		if ((e.target as Element).closest("a")) setOpen(false);
 	});
 	document.addEventListener("keydown", (e) => {
-		if (e.key === "Escape") setOpen(false);
+		if (e.key === "Escape" && !mobileMenu.hidden) {
+			setOpen(false);
+			menu.focus();
+		}
 	});
+	// Close it when the layout goes back to the full nav, and when the page returns from the back/forward cache.
+	matchMedia("(min-width: 821px)").addEventListener("change", (e) => e.matches && setOpen(false));
+	addEventListener("pageshow", () => setOpen(false));
 
 	// Theme: BaseHead sets data-theme before first paint; this button flips it and remembers the choice.
 	const root = document.documentElement;
