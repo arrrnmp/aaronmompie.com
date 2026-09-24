@@ -43,6 +43,10 @@ const hrefIn = (l: "en" | "es") => new URL(alternate(Astro.url.pathname, l), sit
 const THEME_COLOR = { dark: "#0b0b0c", light: "#f1efe9" };
 ---
 
+<!-- Global Metadata (charset first: it must sit in the first 1024 bytes) -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="color-scheme" content="dark light" />
 <meta name="theme-color" content={THEME_COLOR.dark} data-dark={THEME_COLOR.dark} data-light={THEME_COLOR.light} />
 <!-- Theme before first paint: the saved choice, else the device setting. The browser bar colour follows it. -->
 <script is:inline>
@@ -62,11 +66,6 @@ const THEME_COLOR = { dark: "#0b0b0c", light: "#f1efe9" };
 		});
 	})();
 </script>
-
-<!-- Global Metadata -->
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<meta name="color-scheme" content="dark light" />
 
 <link rel="icon" href="/favicon.ico" sizes="48x48" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

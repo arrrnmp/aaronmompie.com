@@ -40,7 +40,7 @@ const jsonLd = JSON.stringify({
 });
 ---
 
-<Site title={title} description={description} image={heroImage} type="article" publishedTime={pubDate} modifiedTime={updatedDate}>
+<Site title={title} description={description} image={heroImage} imageAlt={heroImageAlt} type="article" publishedTime={pubDate} modifiedTime={updatedDate}>
 	<script is:inline slot="head" type="application/ld+json" set:html={jsonLd} />
 	<article class="article">
 		<header class="article-head">
