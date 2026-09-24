@@ -32,32 +32,65 @@ const year = new Date().getFullYear();
 </footer>
 
 <script>
-	import { DotField, reducedMotion } from "../scripts/dot-field";
+	import type { DotField } from "../scripts/dot-field";
 
-	const phone = innerWidth < 820;
-	new DotField(document.getElementById("poseDots") as HTMLCanvasElement, "/media/body-density.png", {
-		count: phone ? 4000 : 8000,
-		stillCount: phone ? 12000 : 24000,
-		baseAlpha: 0.7,
-		color: "#ffffff",
-		bg: "#2b3bff",
-		speed: 0.28,
-		fit: 1,
-		photo: "/media/body-photo.webp",
-	});
+	const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 
-	// The footer slides up and fades in as the page lifts off it.
+	const canvas = document.getElementById("poseDots") as HTMLCanvasElement;
 	const sheet = document.getElementById("sheet")!;
 	const wrap = document.getElementById("finaleWrap")!;
+	let dots: Promise<DotField> | undefined;
+	let shown = false;
+	let frame = 0;
+
+	// Where the sheet ends, in page coordinates. Measured when it changes size, so
+	// scrolling itself never has to ask the browser for layout.
+	let sheetEnd = Infinity;
+	new ResizeObserver(() => {
+		sheetEnd = sheet.getBoundingClientRect().bottom + scrollY;
+		queue();
+	}).observe(sheet);
+
+	// The footer slides up and fades in as the page lifts off it.
 	function reveal() {
-		const p = Math.max(0, Math.min(1, (innerHeight - sheet.getBoundingClientRect().bottom) / innerHeight));
+		frame = 0;
+		const bottom = sheetEnd - scrollY;
+		const p = Math.max(0, Math.min(1, (innerHeight - bottom) / innerHeight));
 		const still = reducedMotion.matches;
 		wrap.style.setProperty("--lift", still ? "0%" : `${(1 - p) * 14}%`);
 		wrap.style.setProperty("--fade", String(still ? (p > 0.05 ? 1 : 0) : Math.min(1, p * 1.6)));
+
+		// The footer sits under the sheet the whole time, so an observer would call it
+		// visible from the start. Build the portrait a screen before it shows, and only
+		// animate it while some of it can be seen.
+		if (!dots && bottom < innerHeight * 2) {
+			dots = import("../scripts/dot-field").then(({ compact, DotField }) => {
+				const phone = compact.matches;
+				return new DotField(
+					canvas,
+					"/media/body-density.png",
+					{
+						count: phone ? 4000 : 8000,
+						stillCount: phone ? 12000 : 24000,
+						baseAlpha: 0.7,
+						color: "#ffffff",
+						bg: "#2b3bff",
+						speed: 0.28,
+						fit: 1,
+						photo: "/media/body-photo.webp",
+					},
+					false,
+				);
+			});
+		}
+		if (dots && shown !== p > 0) {
+			const on = (shown = p > 0);
+			dots.then((d) => d.setVisible(on));
+		}
 	}
-	addEventListener("scroll", reveal, { passive: true });
-	addEventListener("resize", reveal);
-	reveal();
+	const queue = () => (frame ||= requestAnimationFrame(reveal));
+	addEventListener("scroll", queue, { passive: true });
+	addEventListener("resize", queue);
 
 	// "#contact" links scroll to the very bottom, where the footer is fully revealed.
 	document.querySelectorAll<HTMLAnchorElement>('a[href="#contact"]').forEach((a) =>
