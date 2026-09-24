@@ -1,34 +1,29 @@
 {
-  "name": "celestial-corot",
+  "name": "aaronmompie.com",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "pnpm run build && wrangler dev",
+    "preview": "bun run build && wrangler dev",
     "astro": "astro",
     "generate-types": "wrangler types",
-    "deploy": "pnpm run build && wrangler deploy"
+    "deploy": "bun run build && wrangler deploy",
+    "check": "astro check"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.8",
-    "@astrojs/cloudflare": "^13.1.10",
-    "@astrojs/language-server": "^2.16.6",
     "@astrojs/mdx": "^5.0.3",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
-    "@tailwindcss/language-server": "^0.14.29",
-    "@tailwindcss/vite": "^4.2.1",
     "astro": "^6.1.1",
-    "sharp": "^0.34.5",
-    "tailwindcss": "^4.2.1",
-    "typescript": "^5.9.3",
-    "typescript-language-server": "^5.1.3"
+    "sharp": "^0.34.5"
   },
-  "packageManager": "pnpm@10.30.3+sha512.c961d1e0a2d8e354ecaa5166b822516668b7f44cb5bd95122d590dd81922f606f5473b6d23ec4a5be05e7fcd18e8488d47d978bbe981872f1145d06e9a740017",
   "devDependencies": {
-    "@types/sharp": "^0.32.0",
+    "@astrojs/check": "^0.9.8",
+    "@astrojs/language-server": "^2.16.6",
     "lightningcss": "^1.32.0",
+    "typescript": "^5.9.3",
+    "typescript-language-server": "^5.1.3",
     "wrangler": "^4.83.0"
   },
   "overrides": {
