@@ -1,24 +1,5 @@
 ---
-import Experience from "../components/home/Experience.astro";
-import Hero from "../components/home/Hero.astro";
-import Projects from "../components/home/Projects.astro";
-import TwoSides from "../components/home/TwoSides.astro";
-import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
-import Site from "../layouts/Site.astro";
-
-const jsonLd = JSON.stringify({
-	"@context": "https://schema.org",
-	"@type": "WebSite",
-	name: SITE_TITLE,
-	url: Astro.site?.toString(),
-	description: SITE_DESCRIPTION,
-});
+import Home from "../views/Home.astro";
 ---
 
-<Site title={SITE_TITLE} description={SITE_DESCRIPTION}>
-	<script is:inline slot="head" type="application/ld+json" set:html={jsonLd} />
-	<Hero />
-	<Experience />
-	<Projects />
-	<TwoSides />
-</Site>
+<Home />

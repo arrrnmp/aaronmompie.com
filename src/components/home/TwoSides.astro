@@ -1,13 +1,28 @@
 ---
-import { ORIGIN } from "../../data/experience";
+import { langFromUrl, path } from "../../i18n/routes";
+import { t } from "../../i18n/ui";
+
+const lang = langFromUrl(Astro.url);
+const ui = t(lang).sides;
+// Strings the record script needs once the visitor starts flipping and playing.
+const strings = JSON.stringify({
+	flipToA: ui.flipTo("A"),
+	flipToB: ui.flipTo("B"),
+	sleeveA: ui.sleeve("A"),
+	sleeveB: ui.sleeve("B"),
+	sideWord: ui.sideWord,
+	coverB: ui.coverB,
+	play: ui.play,
+	pause: ui.pause,
+});
 ---
 
-<section class="sec" id="sides">
-	<div class="sechead"><h2 class="cond h2">Two sides</h2></div>
+<section class="sec" id="sides" data-strings={strings}>
+	<div class="sechead"><h2 class="cond h2">{ui.title}</h2></div>
 	<div class="sides">
 		<div>
 			<div class="deck" id="deck">
-				<button type="button" class="sleeve" id="sleeve" aria-label="Flip the record to side B"><canvas id="cover" aria-hidden="true"></canvas></button>
+				<button type="button" class="sleeve" id="sleeve" aria-label={ui.sleeve("B")}><canvas id="cover" aria-hidden="true"></canvas></button>
 				<div class="record" aria-hidden="true">
 					<div class="spinner"><div class="disc"></div><div class="label"><canvas id="labelArt"></canvas></div></div>
 					<div class="sheen"></div>
@@ -35,35 +50,35 @@ import { ORIGIN } from "../../data/experience";
 			</div>
 			<p class="flip-hint">
 				<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"></path><path d="M3 21v-5h5"></path></svg>
-				<span id="hint">Tap the cover to flip to Side B</span>
+				<span id="hint">{ui.flipTo("B")}</span>
 			</p>
 		</div>
 
 		<div class="panels">
 			<div class="side-panel" id="panelA">
-				<span class="lbl">Side A · Origin</span>
-				<h3 class="cond">Online since six.</h3>
+				<span class="lbl">{ui.aLabel}</span>
+				<h3 class="cond">{ui.aTitle}</h3>
 				<ol class="tl">
-					{ORIGIN.map(({ age, text }) => <li><span class="k">{age}</span><span class="v">{text}</span></li>)}
+					{ui.origin.map(({ age, text }) => <li><span class="k">{age}</span><span class="v">{text}</span></li>)}
 				</ol>
-				<a class="more" href="/about">Read the full story ↗</a>
+				<a class="more" href={path("about", lang)}>{ui.readMore}</a>
 			</div>
 			<div class="side-panel is-hidden" id="panelB" inert aria-hidden="true">
-				<span class="lbl">Side B · Studio</span>
-				<h3 class="cond">In the studio.</h3>
-				<p>Learning to produce music and to sing. Early days, solid foundations. This one has no words yet.</p>
+				<span class="lbl">{ui.bLabel}</span>
+				<h3 class="cond">{ui.bTitle}</h3>
+				<p>{ui.bText}</p>
 				<div class="player">
-					<button class="play" id="play" type="button" aria-label="Play “it's complicated”">
+					<button class="play" id="play" type="button" aria-label={ui.play}>
 						<svg id="playIcon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"></path></svg>
 					</button>
-					<div><div class="tt">it's complicated</div><div class="tm">Aaron Mompié · Instrumental demo · 2026</div></div>
+					<div><div class="tt">it's complicated</div><div class="tm">{ui.trackMeta}</div></div>
 					<div class="wave">
 						<canvas id="wave" aria-hidden="true"></canvas>
-						<input id="seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek in “it's complicated”" />
+						<input id="seek" type="range" min="0" max="1000" value="0" step="1" aria-label={ui.seek} />
 					</div>
 					<div class="times"><span id="cur">0:00</span><span id="dur">–:––</span></div>
 				</div>
-				<p>Also on this side: my first essay, on being present and on nostalgia. Coming soon.</p>
+				<p>{ui.essay}</p>
 				<audio id="audio" src="/media/its-complicated.mp3" preload="metadata"></audio>
 			</div>
 		</div>

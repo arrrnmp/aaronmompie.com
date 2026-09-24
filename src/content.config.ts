@@ -36,6 +36,15 @@ const projects = defineCollection({
 			order: z.number(),
 			featured: z.boolean().default(false),
 			draft: z.boolean().default(false),
+			/** Spanish copy for /es/. The Markdown body is the English long description. */
+			es: z
+				.object({
+					description: z.string(),
+					role: z.string(),
+					long: z.string(),
+					techStack: z.array(z.string()).optional(),
+				})
+				.optional(),
 		}),
 });
 

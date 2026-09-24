@@ -1,0 +1,54 @@
+---
+import { getCollection, render } from "astro:content";
+import { langFromUrl, path } from "../i18n/routes";
+import { t } from "../i18n/ui";
+import Site from "../layouts/Site.astro";
+
+const lang = langFromUrl(Astro.url);
+const ui = t(lang);
+const projects = await Promise.all(
+	(await getCollection("projects", ({ data }) => !data.draft))
+		.sort((a, b) => a.data.order - b.data.order)
+		.map(async (entry) => ({
+			...entry.data,
+			id: entry.id,
+			role: (lang === "es" && entry.data.es?.role) || entry.data.role,
+			techStack: (lang === "es" && entry.data.es?.techStack) || entry.data.techStack,
+			long: lang === "es" ? entry.data.es?.long : undefined,
+			Content: (await render(entry)).Content,
+		})),
+);
+---
+
+<Site title={ui.work.title} description={ui.work.description}>
+	<section class="page-hero">
+		<a class="back" href={path("home", lang)}>{ui.about.back}</a>
+		<span class="lbl">{ui.work.label}</span>
+		<h1 class="cond page-title">{ui.work.heading}</h1>
+		<p class="page-lead">{ui.work.lead}</p>
+	</section>
+	<section class="sec" style="padding-top: 56px">
+		<div class="work-list">
+			{
+				projects.map((p, i) => (
+					<article class="work-row" id={p.id}>
+						<span class="n">{String(i + 1).padStart(2, "0")}</span>
+						<div>
+							<h2>{p.title}</h2>
+							<div class="role">{p.role}</div>
+							<div class="stack">{p.techStack.join(" · ")}</div>
+						</div>
+						<div class="body">
+							{p.long ? <p>{p.long}</p> : <p.Content />}
+							<div class="links">
+								{p.url && <a href={p.url}>{ui.work.live}</a>}
+								{p.github && <a href={p.github}>{ui.work.source}</a>}
+								{!p.url && !p.github && <span class="lbl">{ui.projects.soon}</span>}
+							</div>
+						</div>
+					</article>
+				))
+			}
+		</div>
+	</section>
+</Site>

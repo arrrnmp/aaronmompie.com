@@ -1,0 +1,28 @@
+---
+import Experience from "../components/home/Experience.astro";
+import Hero from "../components/home/Hero.astro";
+import Projects from "../components/home/Projects.astro";
+import TwoSides from "../components/home/TwoSides.astro";
+import { SITE_TITLE } from "../consts";
+import { langFromUrl } from "../i18n/routes";
+import { t } from "../i18n/ui";
+import Site from "../layouts/Site.astro";
+
+const ui = t(langFromUrl(Astro.url));
+const jsonLd = JSON.stringify({
+	"@context": "https://schema.org",
+	"@type": "WebSite",
+	name: SITE_TITLE,
+	url: Astro.site?.toString(),
+	description: ui.meta.description,
+	inLanguage: ["en", "es"],
+});
+---
+
+<Site title={SITE_TITLE} description={ui.meta.description}>
+	<script is:inline slot="head" type="application/ld+json" set:html={jsonLd} />
+	<Hero />
+	<Experience />
+	<Projects />
+	<TwoSides />
+</Site>

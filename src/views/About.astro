@@ -1,0 +1,72 @@
+---
+import { SITE_GITHUB_URL, SITE_LINKEDIN_URL, SITE_TITLE, SITE_X_URL } from "../consts";
+import { langFromUrl, path } from "../i18n/routes";
+import { t } from "../i18n/ui";
+import Site from "../layouts/Site.astro";
+
+const lang = langFromUrl(Astro.url);
+const ui = t(lang);
+const a = ui.about;
+
+const personJsonLd = JSON.stringify({
+	"@context": "https://schema.org",
+	"@type": "Person",
+	name: SITE_TITLE,
+	url: Astro.site?.toString(),
+	description: ui.meta.description,
+	jobTitle: ui.meta.role,
+	address: { "@type": "PostalAddress", addressLocality: "Madrid", addressCountry: "ES" },
+	sameAs: [SITE_LINKEDIN_URL, SITE_GITHUB_URL, SITE_X_URL],
+	knowsLanguage: ["es", "en"],
+	knowsAbout: ["Infrastructure", "Virtualization", "Proxmox", "Linux", "Windows Server", "Networking", "Self-hosting", "Local LLM inference"],
+});
+---
+
+<Site title={a.title} description={a.description}>
+	<script is:inline slot="head" type="application/ld+json" set:html={personJsonLd} />
+
+	<section class="story-hero">
+		<a class="back" href={path("home", lang)}>{a.back}</a>
+		<span class="lbl">{a.label}</span>
+		<h1 class="cond story-title">{a.heading[0]}<br />{a.heading[1]}</h1>
+		<p class="story-lead">{a.lead}</p>
+	</section>
+
+	<section class="sec chapters" aria-label={a.label}>
+		{
+			a.chapters.map((c) => (
+				<article class="chapter">
+					<div class="age"><span class="cond">{c.age}</span><span class="lbl">{a.yearsOld}</span></div>
+					<div class="ch-body"><h2>{c.title}</h2><p set:html={c.text} /></div>
+				</article>
+			))
+		}
+		<article class="chapter now">
+			<div class="age"><span class="cond">{a.nowAge}</span><span class="lbl">2026</span></div>
+			<div class="ch-body">
+				<h2>{a.nowTitle}</h2>
+				<p>{a.nowText}</p>
+				<a class="btn btn-blue" href="#contact">{a.hire}</a>
+			</div>
+		</article>
+	</section>
+
+	<section class="sec thread">
+		<span class="lbl">{a.threadLabel}</span>
+		<blockquote class="cond">{a.thread}</blockquote>
+		<p>{a.threadText}</p>
+	</section>
+
+	<section class="sec trio">
+		{
+			a.trio.map((x) => (
+				<article>
+					<span class="lbl">{x.label}</span>
+					<h3>{x.title}</h3>
+					<p>{x.text}</p>
+					{"link" in x && x.link && <a class="more" href={`${path("home", lang)}#sides`}>{x.link}</a>}
+				</article>
+			))
+		}
+	</section>
+</Site>

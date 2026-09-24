@@ -1,14 +1,10 @@
 ---
-import {
-	SITE_CV_URL,
-	SITE_EMAIL,
-	SITE_GITHUB_URL,
-	SITE_INSTAGRAM_URL,
-	SITE_LINKEDIN_URL,
-	SITE_TITLE,
-	SITE_X_URL,
-} from "../consts";
+import { SITE_EMAIL, SITE_GITHUB_URL, SITE_LINKEDIN_URL, SITE_TITLE, SITE_X_URL } from "../consts";
+import { langFromUrl } from "../i18n/routes";
+import { t } from "../i18n/ui";
 
+const lang = langFromUrl(Astro.url);
+const ui = t(lang);
 const year = new Date().getFullYear();
 ---
 
@@ -17,23 +13,24 @@ const year = new Date().getFullYear();
 	<div class="finale-wrap" id="finaleWrap">
 		<div class="finale-in">
 			<div>
-				<div class="lbl">Open to work</div>
-				<h2 class="cond">Let's talk.</h2>
+				<div class="lbl">{ui.finale.label}</div>
+				<h2 class="cond">{ui.finale.title}</h2>
 				<a class="mail" href={`mailto:${SITE_EMAIL}`} id="mail">{SITE_EMAIL}</a>
-				<div class="copyrow"><button class="copy" id="copy" type="button">Copy email</button></div>
+				<div class="copyrow">
+					<button class="copy" id="copy" type="button" data-copied={ui.finale.copied} data-selected={ui.finale.selected}>{ui.finale.copy}</button>
+				</div>
 				<div class="biglinks">
 					<a href={SITE_LINKEDIN_URL} rel="noreferrer" target="_blank">LinkedIn</a>
 					<a href={SITE_GITHUB_URL} rel="noreferrer" target="_blank">GitHub</a>
 					<a href={SITE_X_URL} rel="noreferrer" target="_blank">X</a>
-					<a href={SITE_INSTAGRAM_URL} rel="noreferrer" target="_blank">Instagram</a>
-					<a href={SITE_CV_URL}>CV (PDF)</a>
+					<a href={ui.meta.cv}>{ui.finale.cv}</a>
 				</div>
 			</div>
 			<div class="pose">
-				<canvas id="poseDots" role="img" aria-label="Aaron framing the camera with his hand, drawn in white dots. Hovering reveals the photo."></canvas>
+				<canvas id="poseDots" role="img" aria-label={ui.finale.pose}></canvas>
 			</div>
 		</div>
-		<div class="fine"><span>© {year} {SITE_TITLE}</span><span>Madrid, ES</span></div>
+		<div class="fine"><span>© {year} {SITE_TITLE}</span><span>{ui.finale.place}</span></div>
 	</div>
 </footer>
 
@@ -75,18 +72,19 @@ const year = new Date().getFullYear();
 	);
 
 	const copy = document.getElementById("copy")!;
+	const label = copy.textContent;
 	copy.addEventListener("click", async () => {
 		try {
 			await navigator.clipboard.writeText(SITE_EMAIL);
-			copy.textContent = "Copied";
+			copy.textContent = copy.dataset.copied ?? "";
 		} catch {
 			const range = document.createRange();
 			range.selectNodeContents(document.getElementById("mail")!);
 			const sel = getSelection();
 			sel?.removeAllRanges();
 			sel?.addRange(range);
-			copy.textContent = "Selected, press copy";
+			copy.textContent = copy.dataset.selected ?? "";
 		}
-		setTimeout(() => (copy.textContent = "Copy email"), 1800);
+		setTimeout(() => (copy.textContent = label), 1800);
 	});
 </script>

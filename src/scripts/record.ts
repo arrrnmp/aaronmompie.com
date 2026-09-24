@@ -65,6 +65,7 @@ export function initRecord() {
 	const wave = $<HTMLCanvasElement>("wave");
 	const play = $("play");
 	if (!deck || !audio) return;
+	const L = JSON.parse($("sides").dataset.strings ?? "{}") as Record<string, string>;
 
 	// Fonts are self-hosted under hashed family names; read the real one off the page.
 	const cond = getComputedStyle($("hint").closest(".sides")!.querySelector(".cond")!).fontFamily;
@@ -81,7 +82,7 @@ export function initRecord() {
 			["IT'S", "COMPLI-", "CATED"].forEach((l, i) => x.fillText(l, 64, 200 + i * 104));
 			x.fillStyle = "#2b3bff";
 			x.font = `800 34px ${cond}`;
-			x.fillText("SIDE B — STUDIO", 68, 1030);
+			x.fillText(L.coverB, 68, 1030);
 		}
 		return c;
 	};
@@ -101,7 +102,7 @@ export function initRecord() {
 		x.fillStyle = side === "A" ? "#fff" : "#2b3bff";
 		x.font = `900 34px ${cond}`;
 		x.textAlign = "center";
-		x.fillText(`SIDE ${side}`, 200, 360);
+		x.fillText(`${L.sideWord} ${side}`, 200, 360);
 		return c;
 	};
 	const paint = (canvas: HTMLCanvasElement, src: HTMLCanvasElement) => {
@@ -160,8 +161,8 @@ export function initRecord() {
 		void to.offsetWidth;
 		to.classList.remove("is-out");
 		const next = s === "A" ? "B" : "A";
-		sleeve.setAttribute("aria-label", `Flip the record to side ${next}`);
-		$("hint").textContent = `Tap the cover to flip to Side ${next}`;
+		sleeve.setAttribute("aria-label", next === "A" ? L.sleeveA : L.sleeveB);
+		$("hint").textContent = next === "A" ? L.flipToA : L.flipToB;
 		if (s === "B") await wait(300);
 		busy = false;
 	}
@@ -246,12 +247,12 @@ export function initRecord() {
 		deck.classList.add("is-playing");
 		if (!waveRaf) waveRaf = requestAnimationFrame(waveLoop);
 		$("playIcon").innerHTML = PAUSE;
-		play.setAttribute("aria-label", "Pause “it's complicated”");
+		play.setAttribute("aria-label", L.pause);
 	});
 	audio.addEventListener("pause", () => {
 		deck.classList.remove("is-playing");
 		$("playIcon").innerHTML = PLAY;
-		play.setAttribute("aria-label", "Play “it's complicated”");
+		play.setAttribute("aria-label", L.play);
 	});
 	audio.addEventListener("loadedmetadata", () => ($("dur").textContent = fmt(audio.duration)));
 	audio.addEventListener("timeupdate", () => {
