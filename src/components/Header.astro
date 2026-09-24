@@ -24,7 +24,7 @@ const current = (href: string) => !href.includes("#") && isActivePath(Astro.url.
 		{links.map(({ href, label }) => <a href={href} aria-current={current(href) ? "page" : undefined}>{label}</a>)}
 	</nav>
 	<div class="right">
-		<a class="btn btn-blue" href="#contact">Book me ↗</a>
+		<a class="btn btn-blue" href="#contact">Hire me ↗</a>
 		<button class="menu-btn" id="menu" type="button" aria-expanded="false" aria-controls="nav" aria-label="Open menu">
 			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16"></path><path d="M4 16h16"></path></svg>
 		</button>
