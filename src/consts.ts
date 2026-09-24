@@ -1,10 +1,9 @@
 // Site-wide identity and links. Import from here; never hardcode these.
 
 export const SITE_TITLE = 'Aaron Mompié';
-/** English role for build-time assets (OG image). Page copy lives in src/i18n/ui.ts. */
+/** The English job title. English copy in src/i18n/ui.ts builds on it; Spanish has its own wording. */
 export const SITE_ROLE = 'Infrastructure engineer';
-export const SITE_DESCRIPTION =
-	'Infrastructure engineer in Madrid. Building things that close the gap between people and what they need.';
+export const SITE_DESCRIPTION = `${SITE_ROLE} in Madrid. Building things that close the gap between people and what they need.`;
 export const SITE_TWITTER_HANDLE = '@arrrnmp';
 
 /** English contact address (llms.txt); pages take theirs from src/i18n/ui.ts (hola@ in Spanish). */

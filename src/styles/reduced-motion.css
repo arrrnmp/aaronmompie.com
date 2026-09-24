@@ -1,6 +1,6 @@
 @media (prefers-reduced-motion: reduce){
   .sleeve,.record,.arm,.mark-name,.mark-name>span,.side-panel{transition:none}
-  .deck.is-playing .spinner{animation-duration:6s}
+  .deck.is-playing .spinner{animation:none}
 }
 @media (prefers-reduced-motion: reduce){
   .ticker{animation:none}

@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "celestial-corot",
+      "name": "aaronmompie.com",
       "dependencies": {
         "@astrojs/mdx": "^5.0.3",
         "@astrojs/rss": "^4.0.18",

@@ -3,6 +3,8 @@
  * English is the source shape; Spanish must match it key for key.
  * Strings used with `set:html` may contain <b> for highlights.
  */
+import { SITE_DESCRIPTION, SITE_ROLE, SITE_TITLE } from '../consts';
+
 export const LANGS = ['en', 'es'] as const;
 export type Lang = (typeof LANGS)[number];
 
@@ -20,9 +22,9 @@ const en = {
 	meta: {
 		locale: 'en_GB',
 		/** The home page <title>; other pages get "Page | Aaron Mompié". */
-		homeTitle: 'Aaron Mompié · Infrastructure engineer in Madrid',
-		role: 'Infrastructure engineer',
-		description: 'Infrastructure engineer in Madrid. Building things that close the gap between people and what they need.',
+		homeTitle: `${SITE_TITLE} · ${SITE_ROLE} in Madrid`,
+		role: SITE_ROLE,
+		description: SITE_DESCRIPTION,
 		cv: '/cv_en.pdf',
 		email: 'hello@aaronmompie.com',
 		/** Alt text for the share image (Open Graph / X card). */
@@ -53,7 +55,7 @@ const en = {
 		work: 'See the work',
 		cv: 'CV (PDF)',
 		portrait: 'Portrait of Aaron in a cap and hoodie, drawn in white dots. Hovering reveals the photo.',
-		facts: ['Infrastructure engineer', 'Based in Madrid', 'Open to remote roles', 'Spanish & English', 'Proxmox · Linux · Windows Server', 'Self-hosted everything'],
+		facts: [SITE_ROLE, 'Based in Madrid', 'Open to remote roles', 'Spanish & English', 'Proxmox · Linux · Windows Server', 'Self-hosted everything'],
 	},
 	experience: {
 		title: 'Experience',
@@ -155,11 +157,11 @@ const en = {
 	},
 	about: {
 		title: 'About',
-		description: 'Madrid born and raised. Infrastructure engineer. The full story, from a first website at six to a homelab that never sleeps.',
+		description: `Madrid born and raised. ${SITE_ROLE}. The full story, from a first website at six to a homelab that never sleeps.`,
 		back: '← Back home',
 		label: 'About · the full story',
 		heading: ['The full', 'story.'],
-		lead: "Madrid born and raised. Infrastructure engineer. ADHD, Asperger's, gifted. Building things that close the gap between people and what they need.",
+		lead: `Madrid born and raised. ${SITE_ROLE}. ADHD, Asperger's, gifted. Building things that close the gap between people and what they need.`,
 		yearsOld: 'years old',
 		chapters: [
 			{ age: '6', title: 'The first website.', text: 'Before I could explain what a server was, I wanted one. The website came first, and with it the habit of taking things apart to see how they run.' },
