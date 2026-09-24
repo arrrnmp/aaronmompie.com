@@ -14,7 +14,7 @@ const hasWriting = (await getCollection("blog", ({ data }) => !data.draft)).leng
 const links = [
 	{ href: `${home}#experience`, label: ui.experience },
 	{ href: `${home}#work`, label: ui.work },
-	{ href: path("about", lang), label: ui.about },
+	{ href: `${home}#sides`, label: ui.about },
 	...(hasWriting ? [{ href: "/blog", label: ui.writing }] : []),
 	{ href: "#contact", label: ui.contact },
 ];
