@@ -38,7 +38,8 @@ const current = (href: string) => !href.includes("#") && isActivePath(Astro.url.
 		<a class="icon-btn lang-btn" href={alternate(Astro.url.pathname, other)} hreflang={other} lang={other} aria-label={ui.langName}>{ui.langShort}</a>
 		<a class="btn btn-blue" href="#contact">{ui.hire}</a>
 		<button class="menu-btn" id="menu" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label={ui.openMenu} data-open={ui.openMenu} data-close={ui.closeMenu}>
-			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16"></path><path d="M4 16h16"></path></svg>
+			<svg class="bars" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16"></path><path d="M4 16h16"></path></svg>
+			<svg class="cross" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12"></path><path d="M18 6 6 18"></path></svg>
 		</button>
 	</div>
 </header>
