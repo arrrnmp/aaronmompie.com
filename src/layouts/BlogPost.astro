@@ -55,7 +55,7 @@ const jsonLd = {
 			publishedTime={pubDate}
 			modifiedTime={updatedDate}
 		/>
-		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+		<script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 	</head>
 	<body>
 		<a href="#main" class="sr-only skip-link">Skip to content</a>

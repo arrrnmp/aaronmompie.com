@@ -31,7 +31,8 @@ Every push to `main` builds and deploys on Cloudflare automatically. Other branc
 
 | What | Where |
 | --- | --- |
-| Site copy, email, links, projects | `src/consts.ts` |
+| Site name, job title, email, links | `src/consts.ts` |
+| Projects | `src/content/projects/` (one file each, `order` sorts them) |
 | Blog posts | `src/content/blog/` (`draft: true` hides a post) |
 | CV | `public/cv.pdf` |
 | Styles and design tokens | `src/styles/` (`tokens.css` for colors, fonts, motion) |

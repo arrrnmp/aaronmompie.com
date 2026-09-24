@@ -38,19 +38,20 @@ src/
 │   ├── FormattedDate.astro
 │   └── TableOfContents.astro
 ├── content/blog/           # Blog posts (.md/.mdx)
-├── content.config.ts       # Blog collection schema
-├── consts.ts               # Site copy, email, CV and social URLs, projects: import from here and never hardcode
+├── content/projects/       # One .md per project; the body is the long description
+├── content.config.ts       # Collection schemas (blog, projects)
+├── consts.ts               # Site name, role (SITE_ROLE), email, CV and social URLs: import from here and never hardcode
 ├── layouts/
 │   ├── BlogPost.astro      # Article layout: TOC, reading time, tags, BlogPosting JSON-LD
 │   └── Page.astro          # Simple page layout (used by 404)
 ├── pages/
 │   ├── index.astro         # Home: hero, latest writing (only if posts exist), contact
-│   ├── projects.astro      # Work: project list from PROJECTS in consts.ts
+│   ├── projects.astro      # Work: the projects collection, sorted by `order`
 │   ├── about.astro
 │   ├── 404.astro
 │   ├── blog/index.astro, blog/[...slug].astro, blog/tag/[tag].astro
 │   ├── rss.xml.js
-│   ├── llms.txt.ts         # /llms.txt (llmstxt.org), generated from consts + posts
+│   ├── llms.txt.ts         # /llms.txt (llmstxt.org), generated from consts, projects and posts
 │   └── og-image.png.ts     # Default OG image, rendered to PNG with sharp at build time
 ├── styles/                 # See "Styling"
 └── utils/                  # nav.ts (active-link matching), slug.ts, reading-time.ts
@@ -93,6 +94,10 @@ Both systems below respect `prefers-reduced-motion`; the overrides are in `reduc
   - `draft: true` hides a post everywhere: list, pages, tags, RSS, llms.txt and the nav's "Writing" link.
   - Tag URLs go through `slugify()`.
   - The list and article views share `transition:name={`post-image-${post.id}`}`, so keep them in sync.
+- **Job title**: always `SITE_ROLE` ("Infrastructure engineer"). It's used in the footer, meta description, JSON-LD and OG image, so never type it out.
+- **Projects**:
+  - Frontmatter needs `title`, `description` (one line), `role`, `techStack` and `order`. It can also have `url`, `github`, `cover` (an `image()` screenshot next to the file), `featured` and `draft`.
+  - The Markdown body is the long description shown on the Work page.
 - **Images**: use `astro:assets` (`Image` / `Picture`) with `formats={["avif", "webp"]}`.
 - **Reading time**: `src/utils/reading-time.ts` counts 200 words per minute over the raw Markdown body.
 - **TypeScript**: strict mode. Avoid `any`, and use kebab-case filenames for utilities.

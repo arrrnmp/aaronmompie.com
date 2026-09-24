@@ -1,4 +1,5 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 const blog = defineCollection({
@@ -17,4 +18,25 @@ const blog = defineCollection({
 		}),
 });
 
-export const collections = { blog };
+const projects = defineCollection({
+	// One Markdown file per project in `src/content/projects/`; the body is the long description.
+	loader: glob({ base: './src/content/projects', pattern: '**/*.md' }),
+	schema: ({ image }) =>
+		z.object({
+			title: z.string(),
+			/** One-liner used in lists and llms.txt. */
+			description: z.string(),
+			role: z.string(),
+			techStack: z.array(z.string()),
+			url: z.url().optional(),
+			github: z.url().optional(),
+			/** Screenshot, relative to the project file. */
+			cover: image().optional(),
+			/** Sort position on the Work page, lowest first. */
+			order: z.number(),
+			featured: z.boolean().default(false),
+			draft: z.boolean().default(false),
+		}),
+});
+
+export const collections = { blog, projects };
