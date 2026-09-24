@@ -24,7 +24,7 @@ const current = (href: string) => !href.includes("#") && isActivePath(Astro.url.
 <header class="top" id="top">
 	<a class="mark" href={home} aria-label={`${SITE_TITLE}, ${ui.home}`}>
 		<span class="mono" aria-hidden="true">AM</span>
-		<span class="mark-name" aria-hidden="true">{SITE_TITLE}</span>
+		<span class="mark-name" aria-hidden="true"><span>{SITE_TITLE}</span></span>
 	</a>
 	<nav id="nav" aria-label={ui.label}>
 		{links.map(({ href, label }) => <a href={href} aria-current={current(href) ? "page" : undefined}>{label}</a>)}

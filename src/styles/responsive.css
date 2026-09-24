@@ -16,20 +16,20 @@
   .feature{gap:28px}
   .hero{grid-template-columns:minmax(0,1fr) minmax(0,1fr);--fit:calc((100vw - 2 * var(--g)) / 2 * 1.12)}
 }
-/* Small laptops: the name that fades in on scroll would run into the centered menu, so the AM box stays on its own. Spanish labels are longer. */
-@media (max-width:1180px){
+/* Small laptops and landscape tablets: no room for the name beside the menu (Spanish labels are longer), so the AM box stays on its own. */
+@media (min-width:821px) and (max-width:960px){
   .mark-name{display:none}
 }
-@media (max-width:1320px){
+@media (min-width:821px) and (max-width:1140px){
   :lang(es) .mark-name{display:none}
 }
 @media (min-width:821px) and (max-width:1000px){
-  .top nav{gap:20px}
+  .top nav{gap:18px;margin-left:14px}
+  .top nav a{font-size:18px}
   .top .right{gap:8px}
 }
 /* Tablet portrait and phones: collapsed nav, stacked hero */
 @media (max-width:820px){
-  .mark-name,:lang(es) .mark-name{position:static;display:inline}
   .top nav{display:none}
   .top nav.is-open{display:flex;flex-direction:column;gap:0;position:absolute;left:0;right:0;top:100%;background:var(--bg);border-bottom:2px solid var(--text);padding:8px var(--g)}
   .menu-btn{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:6px;border:2px solid var(--text);background:transparent;color:var(--text);cursor:pointer}
