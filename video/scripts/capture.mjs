@@ -117,11 +117,11 @@ cdp.on("Page.screencastFrame", async ({ data, metadata, sessionId }) => {
 await cdp.send("Page.startScreencast", { format: "jpeg", quality: 88, maxWidth: W * DPR, maxHeight: H * DPR, everyNthFrame: 1 });
 await wait(300);
 
-// Open on the name, then the dot portrait: push in and paint the photo out from under the dots.
-cam(1.4, 960, 330);
+// Open on the whole hero, then the dot portrait: lean in and paint the photo out from under the dots.
+cam(1);
 await page.evaluate(([x, y]) => window.__logCursor(x, y), [mouse.x, mouse.y]);
 await wait(1000);
-cam(1.9, 500, 640);
+cam(1.12, 500, 640);
 await glide(560, 520, 1000);
 await glide(420, 700, 700);
 await glide(640, 760, 600);
@@ -143,7 +143,7 @@ await wait(700);
 await glide(1500, 760, 600);
 await scroll(await topOf("#work", -80), 1600);
 const moxen = await center("#work .feature");
-cam(1.35, moxen.x, moxen.y);
+cam(1.08, moxen.x, moxen.y);
 await glide(moxen.x + 300, moxen.y + 40, 800);
 await wait(700);
 
@@ -157,32 +157,32 @@ await scroll(
 	1500,
 );
 const deck = await center("#deck");
-cam(1.6, deck.x + 60, deck.y);
+cam(1.12, deck.x + 60, deck.y);
 const sleeve = await center("#sleeve");
 await glide(sleeve.x, sleeve.y, 900);
 await wait(200);
 await click();
 await wait(1800);
 const play = await center("#play");
-cam(1.6, play.x + 250, play.y + 20);
+cam(1.12, play.x + 150, play.y);
 await glide(play.x, play.y, 900);
 await wait(150);
 await click();
 await wait(1900);
 
-// All the way down: the page lifts off the blue footer.
+// All the way down: the page lifts off the blue footer, then settle on it and hold.
 cam(1);
 await glide(1200, 800, 500);
 await scroll(await page.evaluate(() => document.documentElement.scrollHeight - innerHeight), 2200);
 await wait(300);
 const pose = await center("#poseDots");
-cam(1.5, pose.x, pose.y);
+cam(1.1, pose.x, pose.y);
 await glide(pose.x - 60, pose.y - 120, 900);
 await glide(pose.x + 40, pose.y + 80, 800);
 const mail = await center("#mail");
-cam(1.45, mail.x + 60, mail.y - 60);
+cam(1);
 await glide(mail.x, mail.y, 1000);
-await wait(1500);
+await wait(5000);
 
 recording = false;
 await cdp.send("Page.stopScreencast");

@@ -13,9 +13,9 @@ export type Take = {
 
 type Cam = { zoom: number; x: number; y: number };
 
-/** How long each camera move takes to settle, in seconds. */
-const MOVE = 1.1;
-const ease = Easing.bezier(0.22, 1, 0.36, 1);
+/** How long each camera move takes, in seconds: slow, symmetric ease so nothing snaps. */
+const MOVE = 1.8;
+const ease = Easing.bezier(0.45, 0, 0.55, 1);
 
 /**
  * The camera at time t: each cue eases from wherever the camera was when the
