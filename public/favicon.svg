@@ -1,13 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" fill="#E8351F"/>
-  <text
-    x="16"
-    y="24"
-    font-family="Arial Black, Arial, sans-serif"
-    font-weight="900"
-    font-size="22"
-    text-anchor="middle"
-    fill="#F6F4EF"
-    letter-spacing="-0.5"
-  >A</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#2b3bff"/><g fill="#fff"><path transform="translate(2.985 24.583) scale(0.01073 -0.01073)" d="M20 0 242 1600H714L936 0H628L594 334H362L328 0ZM390 598H566L530 952L506 1336H450L426 952Z"/><path transform="translate(13.672 24.583) scale(0.01073 -0.01073)" d="M80 0V1600H562L694 994L720 264H772L796 994L930 1600H1410V0H1110V492L1168 1336H1114L1030 472L906 0H584L462 472L376 1336H324L380 492V0Z"/></g></svg>

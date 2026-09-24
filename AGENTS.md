@@ -29,7 +29,7 @@ There are no test or lint scripts. Before you finish a change, run `bun run chec
 ```
 src/
 ├── components/
-│   ├── BaseHead.astro        # <head>: SEO/OG/Twitter meta, self-hosted fonts
+│   ├── BaseHead.astro        # <head>: SEO, hreflang, Open Graph/X tags, icons, theme colour, self-hosted fonts
 │   ├── Header.astro          # Sticky header: AM mark (grows into the name), nav, Hire me button, phone menu
 │   ├── Finale.astro          # Full-screen blue contact footer, revealed as the page lifts off it
 │   ├── home/                 # Home sections: Hero (+ facts band), Experience, Projects, TwoSides (the record)
@@ -45,14 +45,16 @@ src/
 │   ├── Site.astro            # Every page: the "sheet" (header + content) over the fixed Finale footer
 │   └── BlogPost.astro        # Article layout: TOC, reading time, tags, BlogPosting JSON-LD
 ├── views/                    # Home, About, Work: one view per page, rendered by both the English and the Spanish route
-├── pages/                    # index, about, projects (+ es/index, es/sobre-mi, es/proyectos), 404, blog/…, rss.xml, llms.txt, og-image.png
+├── pages/                    # index, about, projects (+ es/index, es/sobre-mi, es/proyectos), 404, blog/…, rss.xml, llms.txt, og/[lang]/[page].png
 ├── scripts/
 │   ├── dot-field.ts          # The dot portraits (hero and footer) with the photo reveal under the pointer
 │   └── record.ts             # The two-sided record: sleeve/record/tonearm moves, cover and label art, audio player
 ├── styles/                   # See "Styling"
-└── utils/                    # nav.ts (active-link matching), slug.ts, reading-time.ts
+├── assets/og/                # Static TTFs (latin subset) and the dot portrait used to draw the share images
+└── utils/                    # nav.ts (active-link matching), slug.ts, reading-time.ts, structured-data.ts (schema.org Person)
 public/
 ├── cv_en.pdf, cv_es.pdf    # One CV per language
+├── favicon.svg/.ico, apple-touch-icon.png, icon-*.png, site.webmanifest   # The blue AM mark
 └── media/                    # Dot density maps, cut-out photos, record covers, its-complicated.mp3
 ```
 
@@ -83,6 +85,15 @@ public/
 - Spanish copy is written for a Spain audience, not translated word for word: Spanish number format (767.000), SMR/Grado Medio naming, "Técnico de infraestructura" rather than "Ingeniero" (a regulated title in Spain).
 - Projects keep their English copy in the file and Spanish in the `es:` frontmatter block.
 - The blog is English-only for now; `/es/` pages link to it as is.
+
+## SEO and sharing
+
+- Every page gets its tags from `BaseHead.astro` in its own language: title, description, canonical, `og:*`, `twitter:*` and `og:locale`. Shared pages also get hreflang links (en, es, x-default), and the sitemap repeats those pairs (`serialize` in `astro.config.mjs`).
+- Canonical URLs end in a slash (`/about/`), because that's what Cloudflare serves. Keep the paths in `src/i18n/routes.ts` that way.
+- Share images are drawn at build time by `src/pages/og/[lang]/[page].png.ts` (satori, then sharp), one per page and language, in the site's own fonts. A blog post with a `heroImage` shares that instead.
+- Pass `noindex` to `Site` for pages that shouldn't be in search (404, the blog while it has no published posts; the sitemap skips the blog too).
+- Home and About carry schema.org JSON-LD from `src/utils/structured-data.ts`. The Person has one `@id` across languages.
+- The `theme-color` meta follows the light/dark theme (set in `BaseHead.astro`'s inline script).
 
 ## Conventions
 

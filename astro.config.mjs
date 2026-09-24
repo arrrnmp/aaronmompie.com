@@ -2,18 +2,44 @@
 
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import { readdirSync, readFileSync } from 'node:fs';
 import { defineConfig, fontProviders } from 'astro/config';
+import { alternate, isShared } from './src/i18n/routes.ts';
+
+const SITE = 'https://aaronmompie.com';
+
+// The blog stays out of the sitemap until a post is published (drafts are hidden everywhere).
+const hasPosts = readdirSync('./src/content/blog').some(
+  (f) => /\.mdx?$/.test(f) && !/^draft:\s*true/m.test(readFileSync(`./src/content/blog/${f}`, 'utf8')),
+);
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://aaronmompie.com',
+  site: SITE,
 
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'hover',
   },
 
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    sitemap({
+      filter: (page) => hasPosts || !new URL(page).pathname.startsWith('/blog'),
+      // Pair every page with its other-language version (hreflang), like the <link rel="alternate"> tags in BaseHead.
+      serialize(item) {
+        const { pathname } = new URL(item.url);
+        if (isShared(pathname)) {
+          item.links = [
+            { lang: 'en', url: new URL(alternate(pathname, 'en'), SITE).href },
+            { lang: 'es', url: new URL(alternate(pathname, 'es'), SITE).href },
+            { lang: 'x-default', url: new URL(alternate(pathname, 'en'), SITE).href },
+          ];
+        }
+        return item;
+      },
+    }),
+  ],
 
   // Downloaded at build time and served from our own domain (all three are OFL-licensed).
   fonts: [
