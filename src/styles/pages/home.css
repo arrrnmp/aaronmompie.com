@@ -36,7 +36,8 @@
 .did b{color:var(--blue-ink);font-weight:700}
 
 /* Projects */
-.feature{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;padding:44px;margin-top:28px;background:var(--paper);color:var(--ink);border:2px solid var(--text)}
+/* The featured card inverts the theme: cream on dark pages, near-black on light ones. */
+.feature{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;padding:44px;margin-top:28px;background:var(--text);color:var(--bg)}
 .feature .cond{font-size:clamp(90px,12vw,170px)}
 .feature p{font-size:20px;line-height:1.5;margin:0 0 20px}
 .feature a{display:inline-flex;align-items:center;gap:8px;margin-top:22px;min-height:44px;font-family:var(--cond);font-weight:900;font-size:20px;text-transform:uppercase;letter-spacing:.06em}

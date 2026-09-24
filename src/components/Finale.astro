@@ -1,5 +1,5 @@
 ---
-import { SITE_EMAIL, SITE_GITHUB_URL, SITE_LINKEDIN_URL, SITE_TITLE, SITE_X_URL } from "../consts";
+import { SITE_GITHUB_URL, SITE_LINKEDIN_URL, SITE_TITLE, SITE_X_URL } from "../consts";
 import { langFromUrl } from "../i18n/routes";
 import { t } from "../i18n/ui";
 
@@ -15,7 +15,7 @@ const year = new Date().getFullYear();
 			<div>
 				<div class="lbl">{ui.finale.label}</div>
 				<h2 class="cond" style={`--chars: ${ui.finale.title.length}`}>{ui.finale.title}</h2>
-				<a class="mail" href={`mailto:${SITE_EMAIL}`} id="mail">{SITE_EMAIL}</a>
+				<a class="mail" href={`mailto:${ui.meta.email}`} id="mail">{ui.meta.email}</a>
 				<div class="biglinks">
 					<a href={SITE_LINKEDIN_URL} rel="noreferrer" target="_blank">LinkedIn</a>
 					<a href={SITE_GITHUB_URL} rel="noreferrer" target="_blank">GitHub</a>
