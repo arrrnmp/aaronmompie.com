@@ -93,7 +93,7 @@ public/
 - Share images are drawn at build time by `src/pages/og/[lang]/[page].png.ts` (satori, then sharp), one per page and language, in the site's own fonts. A blog post with a `heroImage` shares that instead.
 - Pass `noindex` to `Site` for pages that shouldn't be in search (404, the blog while it has no published posts; the sitemap skips the blog too).
 - Home and About carry schema.org JSON-LD from `src/utils/structured-data.ts`. The Person has one `@id` across languages.
-- The `theme-color` meta follows the light/dark theme (set in `BaseHead.astro`'s inline script).
+- The `theme-color` meta follows the light/dark theme (set in `BaseHead.astro`'s inline script). Its static value is the brand blue, because crawlers don't run scripts and link embeds (Discord's side stripe) use it.
 
 ## Conventions
 

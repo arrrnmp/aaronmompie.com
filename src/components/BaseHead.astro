@@ -41,13 +41,15 @@ const altLocale = t(lang === "en" ? "es" : "en").meta.locale;
 const hrefIn = (l: "en" | "es") => new URL(alternate(Astro.url.pathname, l), site);
 // Browser UI colour follows the page background (dark first, like tokens.css).
 const THEME_COLOR = { dark: "#0b0b0c", light: "#f1efe9" };
+// Crawlers don't run the script below, so link embeds (Discord's side stripe) read this brand blue.
+const EMBED_COLOR = "#2b3bff";
 ---
 
 <!-- Global Metadata (charset first: it must sit in the first 1024 bytes) -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <meta name="color-scheme" content="dark light" />
-<meta name="theme-color" content={THEME_COLOR.dark} data-dark={THEME_COLOR.dark} data-light={THEME_COLOR.light} />
+<meta name="theme-color" content={EMBED_COLOR} data-dark={THEME_COLOR.dark} data-light={THEME_COLOR.light} />
 <!-- Theme before first paint: the saved choice, else the device setting. The browser bar colour follows it. -->
 <script is:inline>
 	(function () {
