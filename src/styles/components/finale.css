@@ -3,15 +3,16 @@
 .finale-wrap{flex:1;display:flex;flex-direction:column;transform:translateY(var(--lift,12%));opacity:var(--fade,0)}
 .finale-in{flex:1;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:32px;align-items:end}
 .finale .lbl{color:#dfe2ff;font-size:22px;letter-spacing:.16em}
-.finale h2{font-size:clamp(80px,11vw,170px);margin:12px 0 30px;color:#fff}
+.finale-in>div:first-child{container-type:inline-size;min-width:0}
+/* Sized from its own column so any language's title fits on one line. */
+.finale h2{font-size:min(170px,calc(100cqi / (var(--chars, 10) * .56)));margin:12px 0 30px;color:#fff;white-space:nowrap}
 .mail{display:block;font-family:var(--display);font-weight:700;font-size:clamp(19px,3vw,44px);text-decoration:none;line-height:1.1;letter-spacing:0;color:#fff;white-space:nowrap}
 .mail:hover{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:8px}
-.copyrow{display:flex;gap:10px;align-items:center;margin-top:14px}
-.copy{min-height:44px;padding:8px 14px;border:2px solid #fff;background:transparent;color:#fff;border-radius:6px;font-family:var(--cond);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:15px;cursor:pointer}
 .biglinks{display:flex;gap:28px 36px;margin-top:30px;flex-wrap:wrap}
 .biglinks a{font-family:var(--cond);font-weight:900;font-size:30px;text-transform:uppercase;letter-spacing:.05em;min-height:44px;display:inline-flex;align-items:center;text-underline-offset:6px;text-decoration-thickness:3px;color:#fff}
-.biglinks a{padding:0 10px;margin-inline:-10px;border-radius:6px;transition:background-color .15s ease,color .15s ease,text-decoration-color .15s ease}
-.biglinks a:hover,.biglinks a:focus-visible{background:#fff;color:var(--blue);text-decoration-color:transparent}
+.biglinks a{text-decoration:underline;background:linear-gradient(#fff,#fff) no-repeat left bottom / 100% 0;transition:background-size .18s ease,color .18s ease,text-decoration-color .18s ease}
+/* The highlight fills up from the underline and stays exactly the width of the word. */
+.biglinks a:hover,.biglinks a:focus-visible{background-size:100% 100%;color:var(--blue);text-decoration-color:transparent}
 .biglinks a:focus-visible{outline:3px solid #fff;outline-offset:3px}
 .pose{position:relative;height:min(78svh,720px);align-self:end}
 .pose canvas{position:absolute;inset:0;width:100%;height:100%}

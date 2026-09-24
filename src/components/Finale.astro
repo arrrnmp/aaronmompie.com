@@ -14,11 +14,8 @@ const year = new Date().getFullYear();
 		<div class="finale-in">
 			<div>
 				<div class="lbl">{ui.finale.label}</div>
-				<h2 class="cond">{ui.finale.title}</h2>
+				<h2 class="cond" style={`--chars: ${ui.finale.title.length}`}>{ui.finale.title}</h2>
 				<a class="mail" href={`mailto:${SITE_EMAIL}`} id="mail">{SITE_EMAIL}</a>
-				<div class="copyrow">
-					<button class="copy" id="copy" type="button" data-copied={ui.finale.copied} data-selected={ui.finale.selected}>{ui.finale.copy}</button>
-				</div>
 				<div class="biglinks">
 					<a href={SITE_LINKEDIN_URL} rel="noreferrer" target="_blank">LinkedIn</a>
 					<a href={SITE_GITHUB_URL} rel="noreferrer" target="_blank">GitHub</a>
@@ -36,7 +33,6 @@ const year = new Date().getFullYear();
 
 <script>
 	import { DotField, reducedMotion } from "../scripts/dot-field";
-	import { SITE_EMAIL } from "../consts";
 
 	const phone = innerWidth < 820;
 	new DotField(document.getElementById("poseDots") as HTMLCanvasElement, "/media/body-density.png", {
@@ -70,21 +66,4 @@ const year = new Date().getFullYear();
 			scrollTo({ top: document.documentElement.scrollHeight, behavior: reducedMotion.matches ? "auto" : "smooth" });
 		}),
 	);
-
-	const copy = document.getElementById("copy")!;
-	const label = copy.textContent;
-	copy.addEventListener("click", async () => {
-		try {
-			await navigator.clipboard.writeText(SITE_EMAIL);
-			copy.textContent = copy.dataset.copied ?? "";
-		} catch {
-			const range = document.createRange();
-			range.selectNodeContents(document.getElementById("mail")!);
-			const sel = getSelection();
-			sel?.removeAllRanges();
-			sel?.addRange(range);
-			copy.textContent = copy.dataset.selected ?? "";
-		}
-		setTimeout(() => (copy.textContent = label), 1800);
-	});
 </script>
