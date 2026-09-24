@@ -3,6 +3,8 @@ import "../styles/global.css";
 import { Font } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import { SITE_TITLE, SITE_TWITTER_HANDLE } from "../consts";
+import { alternate, isShared, langFromUrl } from "../i18n/routes";
+import { t } from "../i18n/ui";
 
 interface Props {
 	title: string;
@@ -31,7 +33,26 @@ const imageURL = image
 	? new URL(image.src, Astro.site ?? Astro.url)
 	: new URL("/og-image.png", Astro.site ?? Astro.url);
 const ogImageAlt = imageAlt ?? `${fullTitle} — ${description}`;
+const lang = langFromUrl(Astro.url);
+const locale = t(lang).meta.locale;
+const altLocale = t(lang === "en" ? "es" : "en").meta.locale;
+const hrefIn = (l: "en" | "es") => new URL(alternate(Astro.url.pathname, l), Astro.site);
 ---
+
+<!-- Theme before first paint: the saved choice, else the device setting. -->
+<script is:inline>
+	(function () {
+		var root = document.documentElement, saved = null;
+		try { saved = localStorage.getItem("theme"); } catch (e) {}
+		var mq = matchMedia("(prefers-color-scheme: light)");
+		root.dataset.theme = saved || (mq.matches ? "light" : "dark");
+		if (!saved) mq.addEventListener("change", function (e) {
+			var stored = null;
+			try { stored = localStorage.getItem("theme"); } catch (err) {}
+			if (!stored) root.dataset.theme = e.matches ? "light" : "dark";
+		});
+	})();
+</script>
 
 
 <!-- Global Metadata -->
@@ -57,6 +78,15 @@ const ogImageAlt = imageAlt ?? `${fullTitle} — ${description}`;
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
+{
+	isShared(Astro.url.pathname) && (
+		<>
+			<link rel="alternate" hreflang="en" href={hrefIn("en")} />
+			<link rel="alternate" hreflang="es" href={hrefIn("es")} />
+			<link rel="alternate" hreflang="x-default" href={hrefIn("en")} />
+		</>
+	)
+}
 
 <!-- Primary Meta Tags -->
 <title>{fullTitle}</title>
@@ -74,7 +104,8 @@ const ogImageAlt = imageAlt ?? `${fullTitle} — ${description}`;
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content={ogImageAlt} />
 <meta property="og:site_name" content={SITE_TITLE} />
-<meta property="og:locale" content="en_US" />
+<meta property="og:locale" content={locale} />
+<meta property="og:locale:alternate" content={altLocale} />
 {
 	type === "article" && publishedTime && (
 		<meta

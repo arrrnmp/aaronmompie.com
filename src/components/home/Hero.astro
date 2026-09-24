@@ -1,30 +1,34 @@
 ---
-import { SITE_CV_URL, SITE_ROLE, SITE_TITLE } from "../../consts";
-import { FACTS } from "../../data/experience";
+import { SITE_TITLE } from "../../consts";
+import { langFromUrl } from "../../i18n/routes";
+import { t } from "../../i18n/ui";
+
+const ui = t(langFromUrl(Astro.url));
+const h = ui.hero;
 ---
 
 <h1 class="name" id="name">{SITE_TITLE}</h1>
 
-<section class="hero" aria-label="Introduction">
+<section class="hero" aria-label={ui.nav.about}>
 	<div class="panel">
-		<canvas id="heroDots" role="img" aria-label="Portrait of Aaron in a cap and hoodie, drawn in white dots. Hovering reveals the photo."></canvas>
+		<canvas id="heroDots" role="img" aria-label={h.portrait}></canvas>
 	</div>
 	<div class="bill">
-		<h2 class="cond role">{SITE_ROLE.split(" ")[0]}<br />{SITE_ROLE.split(" ").slice(1).join(" ")}.</h2>
-		<p>Servers, networks and virtualization by day. Learning to produce music and sing by night.</p>
-		<p class="stance">Strong opinions, held calmly.</p>
+		<h2 class="cond role" style={`--chars: ${Math.max(...h.role.map((l) => l.length))}`}>{h.role[0]}<br />{h.role[1]}</h2>
+		<p>{h.lede}</p>
+		<p class="stance">{h.stance}</p>
 		<div class="ctas">
-			<a class="btn btn-blue" href="#contact">Hire me ↗</a>
-			<a class="btn btn-line" href="#work">See the work</a>
-			<a class="btn btn-line" href={SITE_CV_URL}>CV (PDF)</a>
+			<a class="btn btn-blue" href="#contact">{h.hire}</a>
+			<a class="btn btn-line" href="#work">{h.work}</a>
+			<a class="btn btn-line" href={ui.meta.cv}>{h.cv}</a>
 		</div>
 	</div>
 </section>
 
 <div class="band">
 	<div class="ticker">
-		<p>{FACTS.map((f) => <Fragment>{f}<i aria-hidden="true">✶</i></Fragment>)}</p>
-		<p aria-hidden="true">{FACTS.map((f) => <Fragment>{f}<i>✶</i></Fragment>)}</p>
+		<p>{h.facts.map((f) => <Fragment>{f}<i aria-hidden="true">✶</i></Fragment>)}</p>
+		<p aria-hidden="true">{h.facts.map((f) => <Fragment>{f}<i>✶</i></Fragment>)}</p>
 	</div>
 </div>
 

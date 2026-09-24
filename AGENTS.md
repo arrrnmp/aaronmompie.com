@@ -37,19 +37,22 @@ src/
 ├── content/blog/             # Blog posts (.md/.mdx); all drafts for now, so "Writing" is hidden
 ├── content/projects/         # One .md per project; the body is the long description; `featured: true` = the big card
 ├── content.config.ts         # Collection schemas (blog, projects)
-├── data/experience.ts        # Work history, the Side A timeline (ages) and the facts band
+├── i18n/
+│   ├── ui.ts                 # ALL page copy, English and Spanish (Spain), incl. experience, timeline and the About story
+│   └── routes.ts             # Page paths per language, the EN/ES switch target, hreflang
 ├── consts.ts                 # Site name, role (SITE_ROLE), email, CV and social URLs: import from here and never hardcode
 ├── layouts/
 │   ├── Site.astro            # Every page: the "sheet" (header + content) over the fixed Finale footer
 │   └── BlogPost.astro        # Article layout: TOC, reading time, tags, BlogPosting JSON-LD
-├── pages/                    # index, about (the full story), projects (Work), 404, blog/…, rss.xml, llms.txt, og-image.png
+├── views/                    # Home, About, Work: one view per page, rendered by both the English and the Spanish route
+├── pages/                    # index, about, projects (+ es/index, es/sobre-mi, es/proyectos), 404, blog/…, rss.xml, llms.txt, og-image.png
 ├── scripts/
 │   ├── dot-field.ts          # The dot portraits (hero and footer) with the photo reveal under the pointer
 │   └── record.ts             # The two-sided record: sleeve/record/tonearm moves, cover and label art, audio player
 ├── styles/                   # See "Styling"
 └── utils/                    # nav.ts (active-link matching), slug.ts, reading-time.ts
 public/
-├── cv.pdf
+├── cv_en.pdf, cv_es.pdf    # One CV per language
 └── media/                    # Dot density maps, cut-out photos, record covers, its-complicated.mp3
 ```
 
@@ -59,7 +62,7 @@ public/
 - `src/styles/global.css` is only an ordered list of `@import`s. **The import order is the cascade order**:
   `reset` → `tokens` → `base` → `components/*` → `pages/*` → `responsive` → `reduced-motion`.
 - `reset.css` sits in `@layer base`, so any unlayered rule beats it.
-- Tokens live on `:root` in `tokens.css`. The site is **dark-first**: bare `:root` is the dark palette, and `prefers-color-scheme: light` swaps in the light one. Key tokens: `--bg`, `--text`, `--muted`, `--line`, `--blue` (#2b3bff), `--blue-ink` (accent text), `--g` (side gutter), `--name` (size of the big name).
+- Tokens live on `:root` in `tokens.css`. The site is **dark-first**: bare `:root` is the dark palette, and `data-theme="light"` (or `prefers-color-scheme: light` before any script runs) swaps in the light one. `BaseHead.astro` sets `data-theme` before first paint from the saved choice (`localStorage.theme`) or the device setting; the header button flips and saves it. Key tokens: `--bg`, `--text`, `--muted`, `--line`, `--blue` (#2b3bff), `--blue-ink` (accent text), `--g` (side gutter), `--name` (size of the big name).
 - Breakpoints (in `responsive.css`): 1100px tablet, 820px tablet portrait and phones (collapsed nav, stacked hero), 640px phones.
 - Check new work at real browser sizes, not just 1440×900: 1920×937, 1536×730, 1366×657, iPad both ways, 390×844 and 360×740.
 
@@ -72,6 +75,14 @@ public/
 
 - Everything that moves on its own (the dot portraits, the facts ticker, the spinning record) follows `prefers-reduced-motion`. Viewers who ask for less motion get the still stipple and a stopped ticker. Keep it that way for anything new.
 - There are no view transitions (`ClientRouter`); pages are plain multi-page navigations with hover prefetching.
+
+## Languages
+
+- English lives at the root, Spanish under `/es/` with Spanish slugs (`/es/sobre-mi`, `/es/proyectos`). Add a page to both by listing it in `src/i18n/routes.ts` and rendering the same view from both routes.
+- Components get the language from the URL with `langFromUrl(Astro.url)` and their copy from `t(lang)`. Never hardcode visible text in a component; add it to both languages in `ui.ts` (the Spanish object is typed against the English one, so a missing key fails `astro check`).
+- Spanish copy is written for a Spain audience, not translated word for word: Spanish number format (767.000), SMR/Grado Medio naming, "Técnico de infraestructura" rather than "Ingeniero" (a regulated title in Spain).
+- Projects keep their English copy in the file and Spanish in the `es:` frontmatter block.
+- The blog is English-only for now; `/es/` pages link to it as is.
 
 ## Conventions
 

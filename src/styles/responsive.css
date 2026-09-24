@@ -21,12 +21,13 @@
   .top{grid-template-columns:auto minmax(0,1fr) auto}
   .top nav{display:none}
   .top nav.is-open{display:flex;flex-direction:column;gap:0;position:absolute;left:0;right:0;top:100%;background:var(--bg);border-bottom:2px solid var(--text);padding:8px var(--g)}
-  .menu-btn{display:inline-grid;place-items:center;width:48px;height:48px;border-radius:6px;border:2px solid var(--text);background:transparent;color:var(--text);cursor:pointer}
+  .menu-btn{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:6px;border:2px solid var(--text);background:transparent;color:var(--text);cursor:pointer}
+  .top .right{gap:8px}
   .top .right .btn{display:none}
   .hero{grid-template-columns:minmax(0,1fr);height:auto}
   .panel{height:clamp(300px,52svh,560px);min-height:0}
   .bill{border-left:0;border-top:2px solid var(--text);padding:26px clamp(20px,4vw,36px)}
-  .bill .role{font-size:min(11.2vw,15cqi)}
+  .bill .role{font-size:min(11.2vw,calc(100cqi / (var(--chars, 14) * .5)))}
   .sechead{display:block}
 }
 /* Phones */
@@ -54,9 +55,12 @@
   .side-panel.is-hidden{display:none}
   .finale-in{grid-template-columns:minmax(0,1fr);align-content:end}
   .finale h2{margin-bottom:18px}
-  .biglinks{gap:18px}
+  .biglinks{gap:14px 30px}
   .biglinks a{font-size:24px}
   .pose{position:absolute;right:0;top:0;width:62%;height:70svh;opacity:.32;pointer-events:none}
   .finale-in>div:first-child{position:relative;z-index:1}
   .fine{flex-direction:column;gap:6px}
+}
+@media (max-width:440px){
+  .mark-name{display:none}
 }

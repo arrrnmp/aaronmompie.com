@@ -1,27 +1,41 @@
 ---
 import { getCollection } from "astro:content";
+import { langFromUrl, path } from "../../i18n/routes";
+import { t } from "../../i18n/ui";
 
-const all = (await getCollection("projects", ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
-const featured = all.find((p) => p.data.featured);
+const lang = langFromUrl(Astro.url);
+const ui = t(lang).projects;
+const all = (await getCollection("projects", ({ data }) => !data.draft))
+	.sort((a, b) => a.data.order - b.data.order)
+	.map((p) => {
+		const es = lang === "es" ? p.data.es : undefined;
+		return {
+			...p.data,
+			description: es?.description ?? p.data.description,
+			long: es?.long ?? p.body?.trim() ?? "",
+			techStack: es?.techStack ?? p.data.techStack,
+		};
+	});
+const featured = all.find((p) => p.featured);
 const rest = all.filter((p) => p !== featured);
 ---
 
 <section class="sec" id="work">
-	<div class="sechead"><h2 class="cond h2">Projects</h2><a class="more" href="/projects" style="margin: 0">All the details ↗</a></div>
+	<div class="sechead"><h2 class="cond h2">{ui.title}</h2><a class="more" href={path("work", lang)} style="margin: 0">{ui.all}</a></div>
 	{
 		featured && (
 			<article class="feature">
 				<div>
-					<div class="lbl">Featured · {featured.data.url || featured.data.github ? "live" : "in progress"}</div>
-					<h3 class="cond" style="margin-top: 10px">{featured.data.title}</h3>
+					<div class="lbl">{ui.featured} · {featured.url || featured.github ? ui.live : ui.inProgress}</div>
+					<h3 class="cond" style="margin-top: 10px">{featured.title}</h3>
 				</div>
 				<div>
-					<p>{featured.body?.trim()}</p>
-					<div class="chips">{featured.data.techStack.map((t) => <span>{t}</span>)}</div>
-					{featured.data.url || featured.data.github ? (
-						<a href={featured.data.url ?? featured.data.github}>{featured.data.url ? "Open it ↗" : "Source ↗"}</a>
+					<p>{featured.long}</p>
+					<div class="chips">{featured.techStack.map((s) => <span>{s}</span>)}</div>
+					{featured.url || featured.github ? (
+						<a href={featured.url ?? featured.github}>{featured.url ? ui.open : `${ui.source} ↗`}</a>
 					) : (
-						<p class="lbl" style="margin: 22px 0 0">Release coming soon</p>
+						<p class="lbl" style="margin: 22px 0 0">{ui.soon}</p>
 					)}
 				</div>
 			</article>
@@ -32,10 +46,10 @@ const rest = all.filter((p) => p !== featured);
 			rest.map((p, i) => (
 				<article class="card">
 					<span class="n">{String(i + 1).padStart(2, "0")}</span>
-					<h3>{p.data.title}</h3>
-					<p>{p.data.description}</p>
-					<span class="stack">{p.data.techStack.join(" · ")}</span>
-					{(p.data.url || p.data.github) && <a href={p.data.url ?? p.data.github}>{p.data.url ? "Live" : "Source"} ↗</a>}
+					<h3>{p.title}</h3>
+					<p>{p.description}</p>
+					<span class="stack">{p.techStack.join(" · ")}</span>
+					{(p.url || p.github) && <a href={p.url ?? p.github}>{p.url ? ui.liveLink : ui.source} ↗</a>}
 				</article>
 			))
 		}

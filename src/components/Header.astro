@@ -1,31 +1,42 @@
 ---
 import { getCollection } from "astro:content";
 import { SITE_TITLE } from "../consts";
+import { alternate, langFromUrl, path } from "../i18n/routes";
+import { t } from "../i18n/ui";
 import { isActivePath } from "../utils/nav";
 
+const lang = langFromUrl(Astro.url);
+const ui = t(lang).nav;
+const other = lang === "en" ? "es" : "en";
+const home = path("home", lang);
 const hasWriting = (await getCollection("blog", ({ data }) => !data.draft)).length > 0;
 
 const links = [
-	{ href: "/#work", label: "Work" },
-	{ href: "/#experience", label: "Experience" },
-	{ href: "/about", label: "About" },
-	...(hasWriting ? [{ href: "/blog", label: "Writing" }] : []),
-	{ href: "#contact", label: "Contact" },
+	{ href: `${home}#work`, label: ui.work },
+	{ href: `${home}#experience`, label: ui.experience },
+	{ href: path("about", lang), label: ui.about },
+	...(hasWriting ? [{ href: "/blog", label: ui.writing }] : []),
+	{ href: "#contact", label: ui.contact },
 ];
 const current = (href: string) => !href.includes("#") && isActivePath(Astro.url.pathname, href);
 ---
 
 <header class="top" id="top">
-	<a class="mark" href="/" aria-label={`${SITE_TITLE}, home`}>
+	<a class="mark" href={home} aria-label={`${SITE_TITLE}, ${ui.home}`}>
 		<span class="mono" aria-hidden="true">AM</span>
 		<span class="mark-name" aria-hidden="true">{SITE_TITLE}</span>
 	</a>
-	<nav id="nav" aria-label="Primary">
+	<nav id="nav" aria-label={ui.label}>
 		{links.map(({ href, label }) => <a href={href} aria-current={current(href) ? "page" : undefined}>{label}</a>)}
 	</nav>
 	<div class="right">
-		<a class="btn btn-blue" href="#contact">Hire me ↗</a>
-		<button class="menu-btn" id="menu" type="button" aria-expanded="false" aria-controls="nav" aria-label="Open menu">
+		<button class="icon-btn theme-btn" id="themeBtn" type="button" data-to-light={ui.toLight} data-to-dark={ui.toDark} aria-label={ui.toLight}>
+			<svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2.5M12 19.5V22M4.2 4.2 6 6M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"></path></svg>
+			<svg class="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path></svg>
+		</button>
+		<a class="icon-btn lang-btn" href={alternate(Astro.url.pathname, other)} hreflang={other} lang={other} aria-label={ui.langName}>{ui.langShort}</a>
+		<a class="btn btn-blue" href="#contact">{ui.hire}</a>
+		<button class="menu-btn" id="menu" type="button" aria-expanded="false" aria-controls="nav" aria-label={ui.openMenu} data-open={ui.openMenu} data-close={ui.closeMenu}>
 			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16"></path><path d="M4 16h16"></path></svg>
 		</button>
 	</div>
@@ -35,6 +46,7 @@ const current = (href: string) => !href.includes("#") && isActivePath(Astro.url.
 	const top = document.getElementById("top")!;
 	const nav = document.getElementById("nav")!;
 	const menu = document.getElementById("menu")!;
+	const themeBtn = document.getElementById("themeBtn")!;
 
 	// On the home page the "AM" mark grows into the full name once the big name scrolls away.
 	const name = document.getElementById("name");
@@ -49,7 +61,7 @@ const current = (href: string) => !href.includes("#") && isActivePath(Astro.url.
 	const setOpen = (open: boolean) => {
 		nav.classList.toggle("is-open", open);
 		menu.setAttribute("aria-expanded", String(open));
-		menu.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+		menu.setAttribute("aria-label", (open ? menu.dataset.close : menu.dataset.open) ?? "");
 	};
 	menu.addEventListener("click", () => setOpen(!nav.classList.contains("is-open")));
 	nav.addEventListener("click", (e) => {
@@ -58,4 +70,19 @@ const current = (href: string) => !href.includes("#") && isActivePath(Astro.url.
 	document.addEventListener("keydown", (e) => {
 		if (e.key === "Escape") setOpen(false);
 	});
+
+	// Theme: BaseHead sets data-theme before first paint; this button flips it and remembers the choice.
+	const root = document.documentElement;
+	const syncThemeLabel = () =>
+		themeBtn.setAttribute("aria-label", (root.dataset.theme === "light" ? themeBtn.dataset.toDark : themeBtn.dataset.toLight) ?? "");
+	themeBtn.addEventListener("click", () => {
+		const next = root.dataset.theme === "light" ? "dark" : "light";
+		root.dataset.theme = next;
+		try {
+			localStorage.setItem("theme", next);
+		} catch {}
+		syncThemeLabel();
+	});
+	new MutationObserver(syncThemeLabel).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+	syncThemeLabel();
 </script>
