@@ -1,29 +1,29 @@
 ---
-import { SITE_GITHUB_URL, SITE_LINKEDIN_URL, SITE_TITLE, SITE_X_URL } from "../consts";
 import { langFromUrl, path } from "../i18n/routes";
 import { t } from "../i18n/ui";
 import Site from "../layouts/Site.astro";
+import { jsonLd, person, personId } from "../utils/structured-data";
 
 const lang = langFromUrl(Astro.url);
 const ui = t(lang);
 const a = ui.about;
 
-const personJsonLd = JSON.stringify({
-	"@context": "https://schema.org",
-	"@type": "Person",
-	name: SITE_TITLE,
-	url: Astro.site?.toString(),
-	description: ui.meta.description,
-	jobTitle: ui.meta.role,
-	address: { "@type": "PostalAddress", addressLocality: "Madrid", addressCountry: "ES" },
-	sameAs: [SITE_LINKEDIN_URL, SITE_GITHUB_URL, SITE_X_URL],
-	knowsLanguage: ["es", "en"],
-	knowsAbout: ["Infrastructure", "Virtualization", "Proxmox", "Linux", "Windows Server", "Networking", "Self-hosting", "Local LLM inference"],
-});
+const site = Astro.site ?? Astro.url;
+const data = jsonLd([
+	{
+		"@type": "ProfilePage",
+		url: new URL(path("about", lang), site).href,
+		name: a.title,
+		description: a.description,
+		inLanguage: lang,
+		mainEntity: { "@id": personId(site) },
+	},
+	person(lang, site),
+]);
 ---
 
 <Site title={a.title} description={a.description}>
-	<script is:inline slot="head" type="application/ld+json" set:html={personJsonLd} />
+	<script is:inline slot="head" type="application/ld+json" set:html={data} />
 
 	<section class="story-hero">
 		<a class="back" href={path("home", lang)}>{a.back}</a>

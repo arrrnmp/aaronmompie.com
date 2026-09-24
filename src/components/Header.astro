@@ -15,7 +15,7 @@ const links = [
 	{ href: `${home}#experience`, label: ui.experience },
 	{ href: `${home}#work`, label: ui.work },
 	{ href: `${home}#sides`, label: ui.about },
-	...(hasWriting ? [{ href: "/blog", label: ui.writing }] : []),
+	...(hasWriting ? [{ href: "/blog/", label: ui.writing }] : []),
 	{ href: "#contact", label: ui.contact },
 ];
 const current = (href: string) => !href.includes("#") && isActivePath(Astro.url.pathname, href);

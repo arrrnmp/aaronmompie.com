@@ -5,6 +5,7 @@ import FormattedDate from "../components/FormattedDate.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import { SITE_TITLE } from "../consts";
 import { getReadingTime } from "../utils/reading-time";
+import { personId } from "../utils/structured-data";
 import { slugify } from "../utils/slug";
 import Site from "./Site.astro";
 
@@ -31,8 +32,9 @@ const jsonLd = JSON.stringify({
 	description,
 	datePublished: pubDate.toISOString(),
 	...(updatedDate && { dateModified: updatedDate.toISOString() }),
-	author: { "@type": "Person", name: SITE_TITLE, url: Astro.site?.toString() },
-	publisher: { "@type": "Person", name: SITE_TITLE },
+	author: { "@type": "Person", "@id": personId(Astro.site ?? Astro.url), name: SITE_TITLE, url: Astro.site?.toString() },
+	publisher: { "@id": personId(Astro.site ?? Astro.url) },
+	inLanguage: "en",
 	mainEntityOfPage: { "@type": "WebPage", "@id": canonicalURL.toString() },
 	...(heroImage && { image: new URL(heroImage.src, Astro.site).toString() }),
 });

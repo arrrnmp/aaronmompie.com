@@ -4,23 +4,30 @@ import Hero from "../components/home/Hero.astro";
 import Projects from "../components/home/Projects.astro";
 import TwoSides from "../components/home/TwoSides.astro";
 import { SITE_TITLE } from "../consts";
-import { langFromUrl } from "../i18n/routes";
+import { langFromUrl, path } from "../i18n/routes";
 import { t } from "../i18n/ui";
 import Site from "../layouts/Site.astro";
+import { jsonLd, person, personId } from "../utils/structured-data";
 
-const ui = t(langFromUrl(Astro.url));
-const jsonLd = JSON.stringify({
-	"@context": "https://schema.org",
-	"@type": "WebSite",
-	name: SITE_TITLE,
-	url: Astro.site?.toString(),
-	description: ui.meta.description,
-	inLanguage: ["en", "es"],
-});
+const lang = langFromUrl(Astro.url);
+const ui = t(lang);
+const site = Astro.site ?? Astro.url;
+const data = jsonLd([
+	{
+		"@type": "WebSite",
+		"@id": new URL(`${path("home", lang)}#website`, site).href,
+		name: SITE_TITLE,
+		url: new URL(path("home", lang), site).href,
+		description: ui.meta.description,
+		inLanguage: lang,
+		publisher: { "@id": personId(site) },
+	},
+	person(lang, site),
+]);
 ---
 
-<Site title={SITE_TITLE} description={ui.meta.description}>
-	<script is:inline slot="head" type="application/ld+json" set:html={jsonLd} />
+<Site title={ui.meta.homeTitle} description={ui.meta.description}>
+	<script is:inline slot="head" type="application/ld+json" set:html={data} />
 	<Hero />
 	<Experience />
 	<Projects />

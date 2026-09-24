@@ -8,7 +8,7 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
 );
 ---
 
-<Site title="Writing" description="Essays and notes on systems, software, and the rest.">
+<Site title="Writing" description="Essays and notes on systems, software, and the rest." noindex={posts.length === 0}>
 	<section class="page-hero">
 		<a class="back" href="/">← Back home</a>
 		<span class="lbl">Writing</span>

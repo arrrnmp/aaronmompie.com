@@ -1,10 +1,10 @@
 import type { Lang } from './ui';
 
-/** Pages that exist in both languages. English lives at the root, Spanish under /es/. */
+/** Pages that exist in both languages. English lives at the root, Spanish under /es/. Trailing slashes match the canonical URLs Cloudflare serves. */
 const PAGES = {
 	home: { en: '/', es: '/es/' },
-	about: { en: '/about', es: '/es/sobre-mi' },
-	work: { en: '/projects', es: '/es/proyectos' },
+	about: { en: '/about/', es: '/es/sobre-mi/' },
+	work: { en: '/projects/', es: '/es/proyectos/' },
 } as const;
 
 export type Page = keyof typeof PAGES;
@@ -28,4 +28,12 @@ export function alternate(pathname: string, to: Lang): string {
 		if (clean === en || clean === es) return p[to];
 	}
 	return PAGES.home[to];
+}
+
+/** Which shared page a path is, if any (used to pick its share image). */
+export function pageFromPath(pathname: string): Page | undefined {
+	const clean = pathname.replace(/\/+$/, '') || '/';
+	return (Object.keys(PAGES) as Page[]).find((page) =>
+		[PAGES[page].en, PAGES[page].es].some((p) => (p.replace(/\/+$/, '') || '/') === clean),
+	);
 }

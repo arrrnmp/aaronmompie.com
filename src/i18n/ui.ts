@@ -19,10 +19,14 @@ export interface Role {
 const en = {
 	meta: {
 		locale: 'en_GB',
+		/** The home page <title>; other pages get "Page | Aaron Mompié". */
+		homeTitle: 'Aaron Mompié · Infrastructure engineer in Madrid',
 		role: 'Infrastructure engineer',
 		description: 'Infrastructure engineer in Madrid. Building things that close the gap between people and what they need.',
 		cv: '/cv_en.pdf',
 		email: 'hello@aaronmompie.com',
+		/** Alt text for the share image (Open Graph / X card). */
+		shareAlt: 'Aaron Mompié, infrastructure engineer in Madrid, next to a dot portrait of him in a cap and hoodie.',
 	},
 	nav: {
 		label: 'Primary',
@@ -192,10 +196,12 @@ const en = {
 const es: typeof en = {
 	meta: {
 		locale: 'es_ES',
+		homeTitle: 'Aaron Mompié · Técnico de infraestructura en Madrid',
 		role: 'Técnico de infraestructura',
 		description: 'Técnico de infraestructura en Madrid. Construyo cosas que acortan la distancia entre las personas y lo que necesitan.',
 		cv: '/cv_es.pdf',
 		email: 'hola@aaronmompie.com',
+		shareAlt: 'Aaron Mompié, técnico de infraestructura en Madrid, junto a un retrato de puntos suyo con gorra y sudadera.',
 	},
 	nav: {
 		label: 'Principal',
