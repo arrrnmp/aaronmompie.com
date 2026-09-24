@@ -1,13 +1,13 @@
 /* Design tokens. Dark-first: bare :root is the dark palette, light is the override.
    Fonts come from the `fonts` array in astro.config.mjs. */
 :root{
-  --bg:#0b0b0c; --surface:#141416; --text:#f3f1ec; --muted:#b3b0a8; --line:#2c2c2f;
+  --bg:#0b0b0c; --surface:#141416; --text:#f3f1ec; --muted:#b3b0a8; --line:#2c2c2f; --track:#66656b;
   --blue:#2b3bff; --blue-deep:#1f2de0; --blue-ink:#9aa4ff; --paper:#f3f1ec; --ink:#0b0b0c;
   --shadow:rgba(0,0,0,.55); --g:max(clamp(16px,3vw,40px),calc((100vw - 1760px) / 2)); --name:min(190px,calc((100vw - 2 * var(--g)) / 10.1)); --top:70px;
   --display:var(--font-unbounded); --cond:var(--font-big-shoulders); --sans:var(--font-instrument-sans);
   color-scheme:dark;
 }
 @media (prefers-color-scheme: light){
-  :root:not([data-theme="dark"]){ --bg:#f1efe9; --surface:#e8e5dd; --text:#0b0b0c; --muted:#4f4d48; --line:#d3d0c6; --blue-ink:#2b3bff; --shadow:rgba(20,20,40,.22); color-scheme:light; }
+  :root:not([data-theme="dark"]){ --bg:#f1efe9; --surface:#e8e5dd; --text:#0b0b0c; --muted:#4f4d48; --line:#d3d0c6; --track:#8a877f; --blue-ink:#2b3bff; --shadow:rgba(20,20,40,.22); color-scheme:light; }
 }
-:root[data-theme="light"]{ --bg:#f1efe9; --surface:#e8e5dd; --text:#0b0b0c; --muted:#4f4d48; --line:#d3d0c6; --blue-ink:#2b3bff; --shadow:rgba(20,20,40,.22); color-scheme:light; }
+:root[data-theme="light"]{ --bg:#f1efe9; --surface:#e8e5dd; --text:#0b0b0c; --muted:#4f4d48; --line:#d3d0c6; --track:#8a877f; --blue-ink:#2b3bff; --shadow:rgba(20,20,40,.22); color-scheme:light; }

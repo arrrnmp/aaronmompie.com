@@ -216,7 +216,7 @@ export function initRecord() {
 		if (live) analyser!.getByteFrequencyData(freq);
 		const cs = getComputedStyle(document.documentElement);
 		const played = cs.getPropertyValue("--blue-ink");
-		const rest = cs.getPropertyValue("--line");
+		const rest = cs.getPropertyValue("--track"); // 3:1 against the page: the bars double as the seek track
 		for (let i = 0; i < bars; i++) {
 			let v = peaks?.length ? peaks[Math.floor((i / bars) * peaks.length)] : 0.12 + 0.08 * Math.sin(i * 0.7);
 			if (live) {
