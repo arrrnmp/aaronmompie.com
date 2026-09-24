@@ -9,6 +9,7 @@ import {
 	SITE_LINKEDIN_URL,
 	SITE_X_URL,
 	SITE_INSTAGRAM_URL,
+	SITE_CV_URL,
 } from "../consts";
 
 const jsonLd = JSON.stringify({
@@ -69,7 +70,7 @@ const year = new Date().getFullYear();
 							<div class="hero-actions">
 								<a href="/projects" class="btn">View work →</a>
 								<a href="/about" class="btn outline">About me</a>
-								<a href="/cv.pdf" class="btn outline">CV</a>
+								<a href={SITE_CV_URL} class="btn outline">CV</a>
 								<span class="hero-socials">
 									<a
 										href={SITE_LINKEDIN_URL}
