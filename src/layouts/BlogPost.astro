@@ -21,7 +21,7 @@ type Props = CollectionEntry<"blog">["data"] & {
 	body?: string;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, tags, headings = [], body = "" } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, heroImageAlt, tags, headings = [], body = "" } = Astro.props;
 const readingTime = getReadingTime(body);
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -58,7 +58,7 @@ const jsonLd = JSON.stringify({
 		{
 			heroImage && (
 				<figure class="cover">
-					<Picture src={heroImage} alt="" width={1400} height={760} formats={["avif", "webp"]} sizes="(max-width: 1760px) 100vw, 1760px" />
+					<Picture src={heroImage} alt={heroImageAlt ?? title} width={1400} height={760} formats={["avif", "webp"]} sizes="(max-width: 1760px) 100vw, 1760px" />
 				</figure>
 			)
 		}
