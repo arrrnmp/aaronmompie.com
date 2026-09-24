@@ -74,26 +74,43 @@ const current = (href: string) => !href.includes("#") && isActivePath(Astro.url.
 		top.classList.add("is-scrolled");
 	}
 
-	const setOpen = (open: boolean) => {
-		if (open === !mobileMenu.hidden) return;
-		mobileMenu.hidden = !open;
+	// Closing plays an exit animation first (header.css); the menu is hidden once it ends.
+	const isOpen = () => !mobileMenu.hidden && !mobileMenu.classList.contains("is-closing");
+	const finishClose = () => {
+		mobileMenu.classList.remove("is-closing");
+		mobileMenu.hidden = true;
+	};
+	mobileMenu.addEventListener("animationend", (e) => {
+		if (e.target === mobileMenu && e.animationName === "mmenu-out") finishClose();
+	});
+	const setOpen = (open: boolean, instant = false) => {
+		if (open === isOpen() && !(instant && !mobileMenu.hidden)) return;
+		if (open) {
+			mobileMenu.classList.remove("is-closing");
+			mobileMenu.hidden = false;
+		} else {
+			mobileMenu.classList.add("is-closing");
+			// Reduced motion (or an instant close) has no exit animation to wait for.
+			if (instant || getComputedStyle(mobileMenu).animationName === "none") finishClose();
+		}
+		// The page scrolls again straight away, so a tapped link can jump to its section while the menu fades.
 		document.documentElement.classList.toggle("menu-open", open);
 		menu.setAttribute("aria-expanded", String(open));
 		menu.setAttribute("aria-label", (open ? menu.dataset.close : menu.dataset.open) ?? "");
 	};
-	menu.addEventListener("click", () => setOpen(mobileMenu.hidden));
+	menu.addEventListener("click", () => setOpen(!isOpen()));
 	mobileMenu.addEventListener("click", (e) => {
 		if ((e.target as Element).closest("a")) setOpen(false);
 	});
 	document.addEventListener("keydown", (e) => {
-		if (e.key === "Escape" && !mobileMenu.hidden) {
+		if (e.key === "Escape" && isOpen()) {
 			setOpen(false);
 			menu.focus();
 		}
 	});
-	// Close it when the layout goes back to the full nav, and when the page returns from the back/forward cache.
-	matchMedia("(min-width: 821px)").addEventListener("change", (e) => e.matches && setOpen(false));
-	addEventListener("pageshow", () => setOpen(false));
+	// Close it at once when the layout goes back to the full nav, and when the page returns from the back/forward cache.
+	matchMedia("(min-width: 821px)").addEventListener("change", (e) => e.matches && setOpen(false, true));
+	addEventListener("pageshow", () => setOpen(false, true));
 
 	// Theme: BaseHead sets data-theme before first paint; this button flips it and remembers the choice.
 	const root = document.documentElement;
